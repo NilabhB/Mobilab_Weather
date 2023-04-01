@@ -58,9 +58,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+        //getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
         setContentView(R.layout.activity_main);
-        Objects.requireNonNull(getSupportActionBar()).hide();
+        //Objects.requireNonNull(getSupportActionBar()).hide();
 
         homeRL = findViewById(R.id.idRLHome);
         loadingPB = findViewById(R.id.idPBLoading);
@@ -77,24 +77,41 @@ public class MainActivity extends AppCompatActivity {
         weatherRVAdapter = new WeatherRVAdapter(this, weatherRVModelArrayList);
         weatherRV.setAdapter(weatherRVAdapter);
 
+//        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+//        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)!= PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)!= PackageManager.PERMISSION_GRANTED) {
+//            ActivityCompat.requestPermissions(MainActivity.this, new String[] {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, PERMISSION_CODE);
+//        }
+//
+//        Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+//        cityName = getCityName(location.getLongitude(),location.getLatitude());
+//
+//        getWeatherInfo(cityName);
+
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)!= PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)!= PackageManager.PERMISSION_GRANTED) {
+            // Location permissions not granted, request permissions
             ActivityCompat.requestPermissions(MainActivity.this, new String[] {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, PERMISSION_CODE);
+        } else {
+            // Location permissions granted, get the user's location
+            Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+            if (location != null) {
+                cityName = getCityName(location.getLongitude(),location.getLatitude());
+                getWeatherInfo(cityName);
+            } else {
+                // Couldn't get location, show message or provide a default location
+                Toast.makeText(this, "Could not get your location, please provide a location or try again later", Toast.LENGTH_LONG).show();
+                getWeatherInfo("Delhi");
+            }
         }
-
-        Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-        cityName = getCityName(location.getLongitude(),location.getLatitude());
-
-        getWeatherInfo(cityName);
 
         searchIV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String city = cityEdt.getText().toString();
-                if(cityName.isEmpty()) {
+                if(city.isEmpty()) {
                     Toast.makeText(MainActivity.this, "Please Enter City Name!", Toast.LENGTH_SHORT).show();
                 } else {
-                    cityNameTV.setText(cityName);
+                    cityNameTV.setText(city);
                     getWeatherInfo(city);
                 }
             }
@@ -138,6 +155,18 @@ public class MainActivity extends AppCompatActivity {
         return cityName;
     }
 
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus) {
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+            if (getSupportActionBar() != null) {
+                getSupportActionBar().hide();
+            }
+        }
+    }
+
+
     private void getWeatherInfo (String cityName) {
         String url = "http://api.weatherapi.com/v1/forecast.json?key=f9823e702b4e405fbaa52927232803&q=" + cityName + "&days=1&aqi=yes&alerts=yes";
         cityNameTV.setText(cityName);
@@ -159,9 +188,11 @@ public class MainActivity extends AppCompatActivity {
                     Picasso.get().load("http:".concat(conditionIcon)).into(iconIV);
                     conditionTV.setText(condition);
                     if(isDay==1) {
-                        Picasso.get().load("https://unsplash.com/photos/lR96g3H5VmA").into(backIV);
+                        //Daytime picture
+                        Picasso.get().load("https://unsplash.com/photos/NAVi0Eyia8w/download?ixid=MnwxMjA3fDB8MXxzZWFyY2h8MTZ8fHNreSUyMGJhY2tncm91bmR8ZW58MHx8fHwxNjgwMzE4MjE5&force=true").into(backIV);
                     } else {
-                        Picasso.get().load("https://unsplash.com/photos/5LOhydOtTKU").into(backIV);
+                        //Night picture
+                        Picasso.get().load("https://unsplash.com/photos/G2jAOMGGlPE/download?ixid=MnwxMjA3fDB8MXxzZWFyY2h8MTJ8fHNreSUyMGJhY2tncm91bmR8ZW58MHx8fHwxNjgwMzE4MjE5&force=true").into(backIV);
                     }
 
                     JSONObject forecastObj = response.getJSONObject("forecast");
