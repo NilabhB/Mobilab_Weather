@@ -15,6 +15,7 @@ import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Patterns;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
 import android.widget.Button;
 import android.widget.EditText;
@@ -46,7 +47,7 @@ public class SignInActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
 
-        Objects.requireNonNull(getSupportActionBar()).hide();
+      //  Objects.requireNonNull(getSupportActionBar()).hide();
         setRequestedOrientation(SCREEN_ORIENTATION_PORTRAIT);
 
         dialog = new ProgressDialog(this);
@@ -201,5 +202,16 @@ public class SignInActivity extends AppCompatActivity {
                 })
                 .show();
 
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus) {
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+            if (getSupportActionBar() != null) {
+                getSupportActionBar().hide();
+            }
+        }
     }
 }
