@@ -152,19 +152,6 @@
             android:textSize="16sp"
             android:textStyle="bold" />
 
-<!--        <Button-->
-<!--            android:id="@+id/shareWeatherBtn"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_below="@id/idTVCondition"-->
-<!--            android:layout_alignParentStart="true"-->
-<!--            android:layout_alignParentEnd="true"-->
-<!--            android:layout_marginStart="125dp"-->
-<!--            android:layout_marginTop="27dp"-->
-<!--            android:layout_marginEnd="124dp"-->
-<!--            android:gravity="center"-->
-<!--            android:text="Share Weather" />-->
-
         <TextView
             android:id="@+id/idTVweatherReport"
             android:layout_width="match_parent"
@@ -184,6 +171,14 @@
             android:textSize="14sp"
             android:textStyle="bold"
             app:drawableLeftCompat="@drawable/baseline_share_24" />
+
+        <ImageView
+            android:id="@+id/logOut"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/idTVweatherForecast"
+            android:layout_marginBottom="25dp"
+            app:srcCompat="@drawable/baseline_logout_24" />
 
 
     </RelativeLayout>
