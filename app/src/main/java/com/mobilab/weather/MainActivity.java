@@ -1,11 +1,13 @@
 package com.mobilab.weather;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.Manifest;
@@ -105,15 +107,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-//        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-//        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)!= PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)!= PackageManager.PERMISSION_GRANTED) {
-//            ActivityCompat.requestPermissions(MainActivity.this, new String[] {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, PERMISSION_CODE);
-//        }
-//
-//        Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-//        cityName = getCityName(location.getLongitude(),location.getLatitude());
-//
-//        getWeatherInfo(cityName);
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)!= PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)!= PackageManager.PERMISSION_GRANTED) {
@@ -146,38 +139,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
-
-//    private void shareWeatherReport() {
-//        if (weatherRVModelArrayList.size() == 0) {
-//            Toast.makeText(this, "No weather data to share.", Toast.LENGTH_SHORT).show();
-//            return;
-//        }
-//
-//        StringBuilder weatherReport = new StringBuilder();
-//        weatherReport.append("Weather Report for ").append(cityNameTV.getText()).append(":\n\n");
-//        weatherReport.append("Current temperature: ").append(temperatureTV.getText()).append("\n");
-//        weatherReport.append("Current condition: ").append(conditionTV.getText()).append("\n\n");
-//        weatherReport.append("Hourly forecast:\n");
-//
-//        SimpleDateFormat input = new SimpleDateFormat("yyyy-MM-dd hh:mm");
-//        SimpleDateFormat output = new SimpleDateFormat("hh:mm aa");
-//
-//        for (WeatherRVModel weather : weatherRVModelArrayList) {
-//            try {
-//                Date t = input.parse(weather.getTime());
-//                weatherReport.append(output.format(t)).append(": ");
-//            } catch (ParseException e) {
-//                e.printStackTrace();
-//            }
-//            weatherReport.append(weather.getTemperature()).append("°C, ");
-//            weatherReport.append(weather.getWindSpeed()).append("Km/h wind\n");
-//        }
-//
-//        Intent shareIntent = new Intent(Intent.ACTION_SEND);
-//        shareIntent.setType("text/plain");
-//        shareIntent.putExtra(Intent.EXTRA_TEXT, weatherReport.toString());
-//        startActivity(Intent.createChooser(shareIntent, "Share weather report via"));
-//    }
 
     private void shareWeatherReport() {
         StringBuilder weatherReport = new StringBuilder();
@@ -328,5 +289,34 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private final AlphaAnimation buttonClick = new AlphaAnimation(1F, 0.5F);
+
+    @Override
+    public void onBackPressed() {
+        new AlertDialog.Builder(this)
+                .setIcon(R.drawable.baseline_exit_to_app_24)
+                .setTitle("Exit App")
+                .setMessage("Do you want to exit?")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finishAffinity();
+                        finish();
+                    }
+                })
+//                .setNeutralButton("", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//
+//                    }
+//                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .show();
+
+    }
 
 }
