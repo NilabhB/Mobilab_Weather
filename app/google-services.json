@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "194702792614",
+    "project_id": "mobilab-weather-d55ab",
+    "storage_bucket": "mobilab-weather-d55ab.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:194702792614:android:713ec55001bd0e6b1f6167",
+        "android_client_info": {
+          "package_name": "com.mobilab.weather"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "194702792614-l397d3thtb5lf7jnjdopm97kith1c5cp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyALfSYxa7-6C_55vk--my1qtFRpTwmIf24"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "194702792614-l397d3thtb5lf7jnjdopm97kith1c5cp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

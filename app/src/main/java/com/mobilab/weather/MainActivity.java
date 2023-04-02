@@ -31,6 +31,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.auth.FirebaseAuth;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -54,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
     private ProgressBar loadingPB;
     private TextView cityNameTV, temperatureTV, conditionTV, weatherReportTV;
     private TextInputEditText cityEdt;
-    private ImageView backIV, iconIV, searchIV;
+    private ImageView backIV, iconIV, searchIV, logOutIV;
     private RecyclerView weatherRV;
     private ArrayList<WeatherRVModel> weatherRVModelArrayList;
     private WeatherRVAdapter weatherRVAdapter;
@@ -81,6 +82,7 @@ public class MainActivity extends AppCompatActivity {
         iconIV = findViewById(R.id.idIVIcon);
         searchIV = findViewById(R.id.idTVSearch);
         weatherReportTV = findViewById(R.id.idTVweatherReport);
+        logOutIV = findViewById(R.id.logOut);
 
         weatherRVModelArrayList = new ArrayList<>();
         weatherRVAdapter = new WeatherRVAdapter(this, weatherRVModelArrayList);
@@ -91,6 +93,15 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 v.startAnimation(buttonClick);
                 shareWeatherReport();
+            }
+        });
+
+        logOutIV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                view.startAnimation(buttonClick);
+                FirebaseAuth.getInstance().signOut();
+                startActivity(new Intent(MainActivity.this, SignInActivity.class));
             }
         });
 
@@ -317,4 +328,5 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private final AlphaAnimation buttonClick = new AlphaAnimation(1F, 0.5F);
+
 }
