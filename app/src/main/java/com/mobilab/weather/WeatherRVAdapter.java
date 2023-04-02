@@ -26,16 +26,6 @@ public class WeatherRVAdapter extends RecyclerView.Adapter<WeatherRVAdapter.View
         this.weatherRVModelArrayList = weatherRVModelArrayList;
     }
 
-//    public WeatherRVAdapter(Context context) {
-//        this.context = context;
-//        weatherRVModelArrayList = new ArrayList<>();
-//    }
-//
-//    public void setWeatherRVModelArrayList(ArrayList<WeatherRVModel> list) {
-//        weatherRVModelArrayList = list;
-//        notifyDataSetChanged();
-//    }
-
     @NonNull
     @Override
     public WeatherRVAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

@@ -6,6 +6,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.Manifest;
 import android.location.Address;
@@ -16,6 +17,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.AlphaAnimation;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -36,7 +38,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -45,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
 
     private RelativeLayout homeRL;
     private ProgressBar loadingPB;
-    private TextView cityNameTV, temperatureTV, conditionTV;
+    private TextView cityNameTV, temperatureTV, conditionTV, weatherReportTV;
     private TextInputEditText cityEdt;
     private ImageView backIV, iconIV, searchIV;
     private RecyclerView weatherRV;
@@ -54,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
     private LocationManager locationManager;
     private int PERMISSION_CODE = 1;
     private String cityName;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,10 +80,19 @@ public class MainActivity extends AppCompatActivity {
         backIV = findViewById(R.id.idIVBack);
         iconIV = findViewById(R.id.idIVIcon);
         searchIV = findViewById(R.id.idTVSearch);
+        weatherReportTV = findViewById(R.id.idTVweatherReport);
 
         weatherRVModelArrayList = new ArrayList<>();
         weatherRVAdapter = new WeatherRVAdapter(this, weatherRVModelArrayList);
         weatherRV.setAdapter(weatherRVAdapter);
+
+        weatherReportTV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                v.startAnimation(buttonClick);
+                shareWeatherReport();
+            }
+        });
 
 //        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 //        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)!= PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)!= PackageManager.PERMISSION_GRANTED) {
@@ -118,6 +135,79 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
+
+//    private void shareWeatherReport() {
+//        if (weatherRVModelArrayList.size() == 0) {
+//            Toast.makeText(this, "No weather data to share.", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
+//
+//        StringBuilder weatherReport = new StringBuilder();
+//        weatherReport.append("Weather Report for ").append(cityNameTV.getText()).append(":\n\n");
+//        weatherReport.append("Current temperature: ").append(temperatureTV.getText()).append("\n");
+//        weatherReport.append("Current condition: ").append(conditionTV.getText()).append("\n\n");
+//        weatherReport.append("Hourly forecast:\n");
+//
+//        SimpleDateFormat input = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+//        SimpleDateFormat output = new SimpleDateFormat("hh:mm aa");
+//
+//        for (WeatherRVModel weather : weatherRVModelArrayList) {
+//            try {
+//                Date t = input.parse(weather.getTime());
+//                weatherReport.append(output.format(t)).append(": ");
+//            } catch (ParseException e) {
+//                e.printStackTrace();
+//            }
+//            weatherReport.append(weather.getTemperature()).append("°C, ");
+//            weatherReport.append(weather.getWindSpeed()).append("Km/h wind\n");
+//        }
+//
+//        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+//        shareIntent.setType("text/plain");
+//        shareIntent.putExtra(Intent.EXTRA_TEXT, weatherReport.toString());
+//        startActivity(Intent.createChooser(shareIntent, "Share weather report via"));
+//    }
+
+    private void shareWeatherReport() {
+        StringBuilder weatherReport = new StringBuilder();
+        String currentDate = getCurrentDateString();
+
+        weatherReport.append("Weather Report for ");
+        weatherReport.append(cityNameTV.getText());
+        weatherReport.append(" on ");
+        weatherReport.append(currentDate);
+        weatherReport.append("\n\n");
+
+        for (WeatherRVModel model : weatherRVModelArrayList) {
+            SimpleDateFormat input = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+            SimpleDateFormat output = new SimpleDateFormat("hh:mm aa");
+            try {
+                Date t = input.parse(model.getTime());
+                weatherReport.append("Time: ").append(output.format(t)).append("\n");
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            weatherReport.append("Temperature: ").append(model.getTemperature()).append("°C\n");
+            weatherReport.append("Wind Speed: ").append(model.getWindSpeed()).append(" Km/h\n");
+            weatherReport.append("\n");
+        }
+
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("text/plain");
+        shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Weather Report");
+        shareIntent.putExtra(Intent.EXTRA_TEXT, weatherReport.toString());
+        startActivity(Intent.createChooser(shareIntent, "Share Weather Report"));
+    }
+
+
+
+    private String getCurrentDateString() {
+        DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM);
+        Calendar calendar = Calendar.getInstance();
+        return dateFormat.format(calendar.getTime());
+    }
+
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -225,4 +315,6 @@ public class MainActivity extends AppCompatActivity {
         requestQueue.add(jsonObjectRequest);
 
     }
+
+    private final AlphaAnimation buttonClick = new AlphaAnimation(1F, 0.5F);
 }
