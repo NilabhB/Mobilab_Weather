@@ -116,16 +116,18 @@
             android:src="@mipmap/ic_launcher" />
 
         <TextView
+            android:id="@+id/idTVCondition"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/idTVCondition"
-            android:layout_margin="10dp"
-            android:gravity="center"
-            android:textAlignment="center"
-            android:text="Condition"
-            android:textColor="@color/white"
             android:layout_below="@id/idIVIcon"
-            />
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
+            android:gravity="center"
+            android:text="Condition"
+            android:textAlignment="center"
+            android:textColor="@color/white" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/idRVWeather"
@@ -137,6 +139,7 @@
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
         <TextView
+            android:id="@+id/idTVweatherForecast"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_above="@id/idRVWeather"
@@ -148,6 +151,39 @@
             android:textColor="	#FFFF00"
             android:textSize="16sp"
             android:textStyle="bold" />
+
+<!--        <Button-->
+<!--            android:id="@+id/shareWeatherBtn"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_below="@id/idTVCondition"-->
+<!--            android:layout_alignParentStart="true"-->
+<!--            android:layout_alignParentEnd="true"-->
+<!--            android:layout_marginStart="125dp"-->
+<!--            android:layout_marginTop="27dp"-->
+<!--            android:layout_marginEnd="124dp"-->
+<!--            android:gravity="center"-->
+<!--            android:text="Share Weather" />-->
+
+        <TextView
+            android:id="@+id/idTVweatherReport"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/idTVweatherForecast"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="120dp"
+            android:layout_marginTop="54dp"
+            android:layout_marginEnd="128dp"
+            android:layout_marginBottom="112dp"
+            android:gravity="center"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:text="Weather Report"
+            android:textColor="	#FFFF00"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:drawableLeftCompat="@drawable/baseline_share_24" />
 
 
     </RelativeLayout>
