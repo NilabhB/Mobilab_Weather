@@ -63,6 +63,9 @@ public class SignInActivity extends AppCompatActivity {
         passwordEye = findViewById(R.id.passwordEye);
 
 
+
+        YoYo.with(Techniques.FlipInY).duration(1500).repeat(3).playOn(passwordEye);
+
         createAcTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
