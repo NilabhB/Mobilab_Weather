@@ -46,13 +46,13 @@ public class WeatherRVAdapter extends RecyclerView.Adapter<WeatherRVAdapter.View
         WeatherRVModel model = weatherRVModelArrayList.get(position);
 
         double tempC = Double.parseDouble(model.getTemperature());
-        double tempF = (tempC * 9 / 5) + 32;
+        double tempF = Double.parseDouble(model.getTemperature());
         String temperature = isFahrenheit ? String.format("%.1f°F", tempF) : String.format("%.1f°C", tempC);
 
         holder.temperatureTV.setText(temperature);
 
         double windKmph = Double.parseDouble(model.getWindSpeed());
-        double windMph = windKmph / 1.609;
+        double windMph = Double.parseDouble(model.getWindSpeed());
         String windSpeed = isFahrenheit ? String.format("%.1f MPH", windMph) : String.format("%.1f Km/h", windKmph);
 
         holder.windTV.setText(windSpeed);

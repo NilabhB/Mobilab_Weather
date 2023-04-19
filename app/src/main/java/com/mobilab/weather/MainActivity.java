@@ -301,18 +301,22 @@ public class MainActivity extends AppCompatActivity {
 
                         String tempC = hourObj.getString("temp_c");
                         double tempC_double = Double.parseDouble(tempC);
-                        double tempF = (tempC_double * 9 / 5) + 32;
-                        String tempF_string = String.format("%.1f", tempF);
-                        String temper = isFahrenheit ? tempF_string : tempC;
+                        temperature = tempC;
+                        if (isFahrenheit) {
+                            double tempF = (tempC_double * 9 / 5) + 32;
+                            temperature = String.format("%.1f", tempF);
+                        }
 
                         String windKmph = hourObj.getString("wind_kph");
                         double windKmph_double = Double.parseDouble(windKmph);
-                        double windMph = windKmph_double / 1.609;
-                        String windMph_string = String.format("%.1f", windMph);
-                        String windSpeed = isFahrenheit ? windMph_string : windKmph;
+                        String windSpeed = windKmph;
+                        if (isFahrenheit) {
+                            double windMph = windKmph_double/ 1.609;
+                            windSpeed = String.format("%.1f", windMph);
+                        }
 
                         String img = hourObj.getJSONObject("condition").getString("icon");
-                        weatherRVModelArrayList.add(new WeatherRVModel(time, temper, img, windSpeed));
+                        weatherRVModelArrayList.add(new WeatherRVModel(time, temperature, img, windSpeed));
                     }
                     weatherRVAdapter.notifyDataSetChanged();
 
@@ -329,8 +333,9 @@ public class MainActivity extends AppCompatActivity {
         });
 
         requestQueue.add(jsonObjectRequest);
-
     }
+
+
 
     private final AlphaAnimation buttonClick = new AlphaAnimation(1F, 0.5F);
 
