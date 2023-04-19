@@ -66,6 +66,9 @@ public class MainActivity extends AppCompatActivity {
     private int PERMISSION_CODE = 1;
     private String cityName;
 
+    private boolean isFahrenheit = false;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +92,8 @@ public class MainActivity extends AppCompatActivity {
 
         Switch tempSwitch = findViewById(R.id.tempSwitch);
         tempSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            isFahrenheit = isChecked;
+            getWeatherInfo(cityName);
             weatherRVAdapter.toggleUnits(isChecked);
         });
 
@@ -235,7 +240,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void getWeatherInfo (String cityName) {
+    private void getWeatherInfo(String cityName) {
         String url = "http://api.weatherapi.com/v1/forecast.json?key=f9823e702b4e405fbaa52927232803&q=" + cityName + "&days=1&aqi=yes&alerts=yes";
         cityNameTV.setText(cityName);
         RequestQueue requestQueue = Volley.newRequestQueue(MainActivity.this);
@@ -249,13 +254,16 @@ public class MainActivity extends AppCompatActivity {
 
                 try {
                     String temperature = response.getJSONObject("current").getString("temp_c");
-                    temperatureTV.setText(temperature+"°C");
+                    double tempCTV = Double.parseDouble(temperature);
+                    double tempFTV = (tempCTV * 9 / 5) + 32;
+                    String temperatureText = isFahrenheit ? String.format("%.1f°F", tempFTV) : String.format("%.1f°C", tempCTV);
+                    temperatureTV.setText(temperatureText);
                     int isDay = response.getJSONObject("current").getInt("is_day");
                     String condition = response.getJSONObject("current").getJSONObject("condition").getString("text");
                     String conditionIcon = response.getJSONObject("current").getJSONObject("condition").getString("icon");
                     Picasso.get().load("http:".concat(conditionIcon)).into(iconIV);
                     conditionTV.setText(condition);
-                    if(isDay==1) {
+                    if (isDay == 1) {
                         //Daytime picture
                         Picasso.get().load("https://unsplash.com/photos/NAVi0Eyia8w/download?ixid=MnwxMjA3fDB8MXxzZWFyY2h8MTZ8fHNreSUyMGJhY2tncm91bmR8ZW58MHx8fHwxNjgwMzE4MjE5&force=true").into(backIV);
                     } else {
@@ -267,16 +275,26 @@ public class MainActivity extends AppCompatActivity {
                     JSONObject forcast0 = forecastObj.getJSONArray("forecastday").getJSONObject(0);
                     JSONArray hourArray = forcast0.getJSONArray("hour");
 
-                    for(int i=0; i<hourArray.length(); i++) {
+                    for (int i = 0; i < hourArray.length(); i++) {
                         JSONObject hourObj = hourArray.getJSONObject(i);
                         String time = hourObj.getString("time");
-                        String temper = hourObj.getString("temp_c");
+
+                        String tempC = hourObj.getString("temp_c");
+                        double tempC_double = Double.parseDouble(tempC);
+                        double tempF = (tempC_double * 9 / 5) + 32;
+                        String tempF_string = String.format("%.1f", tempF);
+                        String temper = isFahrenheit ? tempF_string : tempC;
+
+                        String windKmph = hourObj.getString("wind_kph");
+                        double windKmph_double = Double.parseDouble(windKmph);
+                        double windMph = windKmph_double / 1.609;
+                        String windMph_string = String.format("%.1f", windMph);
+                        String windSpeed = isFahrenheit ? windMph_string : windKmph;
+
                         String img = hourObj.getJSONObject("condition").getString("icon");
-                        String wind = hourObj.getString("wind_kph");
-                        weatherRVModelArrayList.add(new WeatherRVModel(time, temper, img, wind));
+                        weatherRVModelArrayList.add(new WeatherRVModel(time, temper, img, windSpeed));
                     }
                     weatherRVAdapter.notifyDataSetChanged();
-
 
                 } catch (JSONException e) {
                     e.printStackTrace();
