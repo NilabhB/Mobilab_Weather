@@ -12,7 +12,7 @@
        android:layout_width="wrap_content"
        android:layout_height="wrap_content"
        android:layout_centerInParent="true"
-       android:visibility="gone"/>
+       android:visibility="visible"/>
     
     <RelativeLayout
         android:layout_width="match_parent"
@@ -135,10 +135,12 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/idTVCondition"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="8dp"
+            android:checked="false"
+            android:minWidth="48dp"
+            android:minHeight="48dp"
             android:textOff="°C"
             android:textOn="°F"
-            android:checked="false"
             tools:ignore="UseSwitchCompatOrMaterialXml" />
 
         <androidx.recyclerview.widget.RecyclerView
@@ -159,7 +161,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:gravity="center"
-            android:text="Today's Weather Forecast"
+            android:text="@string/today_s_weather_forecast"
             android:textColor="	#FFFF00"
             android:textSize="16sp"
             android:textStyle="bold" />
@@ -168,17 +170,17 @@
             android:id="@+id/idTVweatherReport"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_above="@id/idTVweatherForecast"
+           android:layout_below="@id/tempSwitch"
             android:layout_alignParentStart="true"
             android:layout_alignParentEnd="true"
             android:layout_marginStart="120dp"
-            android:layout_marginTop="54dp"
+            android:layout_marginTop="50dp"
             android:layout_marginEnd="128dp"
             android:layout_marginBottom="112dp"
             android:gravity="center"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            android:text="Weather Report"
+            android:text="@string/weather_report"
             android:textColor="	#FFFF00"
             android:textSize="14sp"
             android:textStyle="bold"

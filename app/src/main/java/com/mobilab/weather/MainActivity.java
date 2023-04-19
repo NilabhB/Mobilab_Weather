@@ -1,11 +1,14 @@
 package com.mobilab.weather;
 
+import static android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -73,8 +76,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
         setContentView(R.layout.activity_main);
+        setRequestedOrientation(SCREEN_ORIENTATION_PORTRAIT);
         //Objects.requireNonNull(getSupportActionBar()).hide();
 
         homeRL = findViewById(R.id.idRLHome);
@@ -90,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
         weatherReportTV = findViewById(R.id.idTVweatherReport);
         logOutIV = findViewById(R.id.logOut);
 
-        Switch tempSwitch = findViewById(R.id.tempSwitch);
+        @SuppressLint("UseSwitchCompatOrMaterialCode") Switch tempSwitch = findViewById(R.id.tempSwitch);
         tempSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             isFahrenheit = isChecked;
             getWeatherInfo(cityName);
@@ -246,17 +250,6 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         return cityName;
-    }
-
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
-        if (hasFocus) {
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
-            if (getSupportActionBar() != null) {
-                getSupportActionBar().hide();
-            }
-        }
     }
 
 
