@@ -23,6 +23,7 @@ import android.view.animation.AlphaAnimation;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -85,6 +86,11 @@ public class MainActivity extends AppCompatActivity {
         searchIV = findViewById(R.id.idTVSearch);
         weatherReportTV = findViewById(R.id.idTVweatherReport);
         logOutIV = findViewById(R.id.logOut);
+
+        Switch tempSwitch = findViewById(R.id.tempSwitch);
+        tempSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            weatherRVAdapter.toggleUnits(isChecked);
+        });
 
         weatherRVModelArrayList = new ArrayList<>();
         weatherRVAdapter = new WeatherRVAdapter(this, weatherRVModelArrayList);

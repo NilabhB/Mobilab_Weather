@@ -21,6 +21,14 @@ public class WeatherRVAdapter extends RecyclerView.Adapter<WeatherRVAdapter.View
     private Context context;
     private ArrayList<WeatherRVModel> weatherRVModelArrayList;
 
+    private boolean isFahrenheit = false;
+
+    public void toggleUnits(boolean isFahrenheit) {
+        this.isFahrenheit = isFahrenheit;
+        notifyDataSetChanged();
+    }
+
+
     public WeatherRVAdapter(Context context, ArrayList<WeatherRVModel> weatherRVModelArrayList) {
         this.context = context;
         this.weatherRVModelArrayList = weatherRVModelArrayList;
