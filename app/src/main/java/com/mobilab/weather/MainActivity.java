@@ -148,6 +148,7 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.this, "Please Enter City Name!", Toast.LENGTH_SHORT).show();
                 } else {
                     cityNameTV.setText(city);
+                    cityName = city; // Update the cityName variable
                     getWeatherInfo(city);
                 }
             }
