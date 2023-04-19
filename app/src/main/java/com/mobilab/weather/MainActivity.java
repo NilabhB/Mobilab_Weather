@@ -170,8 +170,27 @@ public class MainActivity extends AppCompatActivity {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            weatherReport.append("Temperature: ").append(model.getTemperature()).append("°C\n");
-            weatherReport.append("Wind Speed: ").append(model.getWindSpeed()).append(" Km/h\n");
+
+            String temperature = model.getTemperature();
+            if (isFahrenheit) {
+                double tempC = Double.parseDouble(temperature);
+                double tempF = (tempC * 9 / 5) + 32;
+                temperature = String.format("%.1f°F", tempF);
+            } else {
+                temperature = temperature + "°C";
+            }
+            weatherReport.append("Temperature: ").append(temperature).append("\n");
+
+            String windSpeed = model.getWindSpeed();
+            if (isFahrenheit) {
+                double windKmph = Double.parseDouble(windSpeed);
+                double windMph = windKmph / 1.609;
+                windSpeed = String.format("%.1f MPH", windMph);
+            } else {
+                windSpeed = windSpeed + " Km/h";
+            }
+            weatherReport.append("Wind Speed: ").append(windSpeed).append("\n");
+
             weatherReport.append("\n");
         }
 
@@ -181,6 +200,7 @@ public class MainActivity extends AppCompatActivity {
         shareIntent.putExtra(Intent.EXTRA_TEXT, weatherReport.toString());
         startActivity(Intent.createChooser(shareIntent, "Share Weather Report"));
     }
+
 
 
 
