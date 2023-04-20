@@ -71,17 +71,18 @@
                     android:inputType="text"
                     android:singleLine="true"
                     android:textColor="@color/white"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    android:imeOptions="actionSearch" />
 
             </com.google.android.material.textfield.TextInputLayout>
-            
+
             <ImageView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.5"
                 android:id="@+id/idTVSearch"
-                android:layout_margin="10dp"
+                android:layout_width="30dp"
+                android:layout_height="35dp"
                 android:layout_gravity="center"
+                android:layout_margin="10dp"
+                android:layout_weight="0.5"
                 android:background="@android:color/transparent"
                 android:src="@drawable/ic_search"
                 app:tint="@color/white" />

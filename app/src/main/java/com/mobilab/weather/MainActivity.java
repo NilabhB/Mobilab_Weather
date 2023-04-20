@@ -20,9 +20,11 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
+import android.view.inputmethod.EditorInfo;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -94,6 +96,26 @@ public class MainActivity extends AppCompatActivity {
         weatherReportTV = findViewById(R.id.idTVweatherReport);
         logOutIV = findViewById(R.id.logOut);
 
+
+        cityEdt.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    String city = Objects.requireNonNull(cityEdt.getText()).toString();
+                    if (city.isEmpty()) {
+                        Toast.makeText(MainActivity.this, "Please Enter City Name!", Toast.LENGTH_SHORT).show();
+                    } else {
+                        cityNameTV.setText(city);
+                        cityName = city; // Update the cityName variable
+                        getWeatherInfo(city);
+                    }
+                    return true;
+                }
+                return false;
+            }
+        });
+
+
         @SuppressLint("UseSwitchCompatOrMaterialCode") Switch tempSwitch = findViewById(R.id.tempSwitch);
         tempSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             isFahrenheit = isChecked;
@@ -143,7 +165,7 @@ public class MainActivity extends AppCompatActivity {
         searchIV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String city = cityEdt.getText().toString();
+                String city = Objects.requireNonNull(cityEdt.getText()).toString();
                 if(city.isEmpty()) {
                     Toast.makeText(MainActivity.this, "Please Enter City Name!", Toast.LENGTH_SHORT).show();
                 } else {
