@@ -45,6 +45,7 @@ public class WeatherRVAdapter extends RecyclerView.Adapter<WeatherRVAdapter.View
     public void onBindViewHolder(@NonNull WeatherRVAdapter.ViewHolder holder, int position) {
         WeatherRVModel model = weatherRVModelArrayList.get(position);
 
+
         double tempC = Double.parseDouble(model.getTemperature());
         double tempF = Double.parseDouble(model.getTemperature());
         String temperature = isFahrenheit ? String.format("%.1f°F", tempF) : String.format("%.1f°C", tempC);
@@ -79,7 +80,7 @@ public class WeatherRVAdapter extends RecyclerView.Adapter<WeatherRVAdapter.View
 
     public class ViewHolder extends RecyclerView.ViewHolder{
 
-        private TextView windTV, temperatureTV, timeTV;
+        private TextView windTV, temperatureTV, timeTV, cityTV;
         private ImageView conditionIV;
 
         public ViewHolder(@NonNull View itemView) {
@@ -88,6 +89,7 @@ public class WeatherRVAdapter extends RecyclerView.Adapter<WeatherRVAdapter.View
             temperatureTV = itemView.findViewById(R.id.idTVTemperature);
             timeTV = itemView.findViewById(R.id.idTVTime);
             conditionIV = itemView.findViewById(R.id.idTVCondition);
+            cityTV = itemView.findViewById(R.id.idTVCityName);
         }
     }
 }

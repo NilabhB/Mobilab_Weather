@@ -12,7 +12,7 @@
        android:layout_width="wrap_content"
        android:layout_height="wrap_content"
        android:layout_centerInParent="true"
-       android:visibility="visible"/>
+       android:visibility="gone"/>
     
     <RelativeLayout
         android:layout_width="match_parent"
@@ -33,20 +33,32 @@
             android:id="@+id/idTVCityName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="35dp"
             android:gravity="center"
-            android:padding="20dp"
-            android:text="City Name"
+            android:paddingTop="20dp"
+            android:text="@string/city_name"
             android:textAlignment="center"
             android:textColor="	#FFFF00"
             android:textSize="34sp" />
+
+        <TextView
+            android:id="@+id/idTVRegionCountry"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/idTVCityName"
+            android:text="Region, Country"
+            android:textColor="	#FFFF00"
+            android:gravity="center"
+            android:textSize="15sp"
+            tools:ignore="RtlHardcoded" />
+
 
         <LinearLayout
             android:id="@+id/idLLEdt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_below="@id/idTVCityName"
+            android:layout_below="@id/idTVRegionCountry"
             android:weightSum="5"
             >
             <com.google.android.material.textfield.TextInputLayout
@@ -102,13 +114,30 @@
             android:padding="5dp"
             android:text="23"
             android:textColor="@color/white"
-            android:textSize="70sp" />
+            android:textSize="50sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/idLLFeelsLikeAndWindSpeed"
+            android:layout_below="@id/idTVTemperature"
+            >
+            <TextView
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/idTVFeelsLike"
+                android:text="Feels Like: "
+                android:textColor="@color/white"
+                android:gravity="right"
+
+        </LinearLayout>
+
 
         <ImageView
             android:id="@+id/idIVIcon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/idTVTemperature"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:layout_below="@id/idLLFeelsLikeAndWindSpeed"
             android:layout_centerHorizontal="true"
             android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"

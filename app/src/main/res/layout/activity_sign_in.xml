@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/black_shade_1"
     tools:context=".SignInActivity">
 
 
@@ -20,6 +21,7 @@
 
     <EditText
         android:id="@+id/emailBox"
+        android:textColor="@color/white"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginStart="20dp"
@@ -42,7 +44,7 @@
         android:id="@+id/txt_password"
         android:layout_width="wrap_content"
         android:layout_height="20dp"
-
+        android:textColor="@color/white"
         android:layout_marginTop="19dp"
         android:layout_marginBottom="6dp"
         android:text="@string/password"
@@ -56,6 +58,7 @@
 
     <EditText
         android:id="@+id/passwordBox"
+        android:textColor="@color/white"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginStart="20dp"
@@ -76,6 +79,7 @@
 
     <TextView
         android:id="@+id/forgotPasswordtv"
+        android:textColor="@color/white"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/forgot_password"
@@ -89,6 +93,7 @@
 
     <TextView
         android:id="@+id/txt_email"
+        android:textColor="@color/white"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="4dp"

@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
 
     private RelativeLayout homeRL;
     private ProgressBar loadingPB;
-    private TextView cityNameTV, temperatureTV, conditionTV, weatherReportTV;
+    private TextView cityNameTV, regionCountryTV, temperatureTV, conditionTV, weatherReportTV;
     private TextInputEditText cityEdt;
     private ImageView backIV, iconIV, searchIV, logOutIV;
     private RecyclerView weatherRV;
@@ -86,6 +86,7 @@ public class MainActivity extends AppCompatActivity {
         homeRL = findViewById(R.id.idRLHome);
         loadingPB = findViewById(R.id.idPBLoading);
         cityNameTV = findViewById(R.id.idTVCityName);
+        regionCountryTV = findViewById(R.id.idTVRegionCountry);
         temperatureTV = findViewById(R.id.idTVTemperature);
         conditionTV = findViewById(R.id.idTVCondition);
         weatherRV = findViewById(R.id.idRVWeather);
@@ -105,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
                     if (city.isEmpty()) {
                         Toast.makeText(MainActivity.this, "Please Enter City Name!", Toast.LENGTH_SHORT).show();
                     } else {
-                        cityNameTV.setText(city);
+                        //cityNameTV.setText(city);
                         cityName = city; // Update the cityName variable
                         getWeatherInfo(city);
                     }
@@ -169,7 +170,7 @@ public class MainActivity extends AppCompatActivity {
                 if(city.isEmpty()) {
                     Toast.makeText(MainActivity.this, "Please Enter City Name!", Toast.LENGTH_SHORT).show();
                 } else {
-                    cityNameTV.setText(city);
+                   // cityNameTV.setText(city);
                     cityName = city; // Update the cityName variable
                     getWeatherInfo(city);
                 }
@@ -183,7 +184,7 @@ public class MainActivity extends AppCompatActivity {
         String currentDate = getCurrentDateString();
 
         weatherReport.append("Weather Report for ");
-        weatherReport.append(cityNameTV.getText());
+        weatherReport.append(cityNameTV.getText()).append(", ").append(regionCountryTV.getText());
         weatherReport.append(" on ");
         weatherReport.append(currentDate);
         weatherReport.append("\n\n");
@@ -278,7 +279,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void getWeatherInfo(String cityName) {
         String url = "http://api.weatherapi.com/v1/forecast.json?key=f9823e702b4e405fbaa52927232803&q=" + cityName + "&days=1&aqi=yes&alerts=yes";
-        cityNameTV.setText(cityName);
+        //cityNameTV.setText(cityName);
         RequestQueue requestQueue = Volley.newRequestQueue(MainActivity.this);
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
@@ -294,11 +295,23 @@ public class MainActivity extends AppCompatActivity {
                     double tempFTV = (tempCTV * 9 / 5) + 32;
                     String temperatureText = isFahrenheit ? String.format("%.1f°F", tempFTV) : String.format("%.1f°C", tempCTV);
                     temperatureTV.setText(temperatureText);
-                    int isDay = response.getJSONObject("current").getInt("is_day");
+
+                    String city = response.getJSONObject("location").getString("name");
+                    cityNameTV.setText(city);
+
+                    String region = response.getJSONObject("location").getString("region").concat(", ");
+                   // regionTV.setText(region);
+
+                    String country = response.getJSONObject("location").getString("country");
+                    regionCountryTV.setText(region + country);
+
                     String condition = response.getJSONObject("current").getJSONObject("condition").getString("text");
+                    conditionTV.setText(condition);
+
                     String conditionIcon = response.getJSONObject("current").getJSONObject("condition").getString("icon");
                     Picasso.get().load("http:".concat(conditionIcon)).into(iconIV);
-                    conditionTV.setText(condition);
+
+                    int isDay = response.getJSONObject("current").getInt("is_day");
                     if (isDay == 1) {
                         //Daytime picture
                         Picasso.get().load("https://unsplash.com/photos/NAVi0Eyia8w/download?ixid=MnwxMjA3fDB8MXxzZWFyY2h8MTZ8fHNreSUyMGJhY2tncm91bmR8ZW58MHx8fHwxNjgwMzE4MjE5&force=true").into(backIV);

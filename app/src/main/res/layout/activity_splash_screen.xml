@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/black_shade_1"
     tools:context=".SplashScreenActivity">
 
     <ImageView
@@ -15,11 +15,12 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.19"
+        app:layout_constraintVertical_bias="0.403"
         app:srcCompat="@drawable/weather" />
 
     <TextView
         android:id="@+id/textView5"
+        android:textColor="@color/white"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Nilabh Nayan Borthakur"
@@ -35,7 +36,8 @@
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Developed by"
+        android:text="Crafted by:"
+        android:textColor="@color/white"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -44,27 +46,4 @@
         app:layout_constraintTop_toBottomOf="@+id/mobilabLogo"
         app:layout_constraintVertical_bias="0.778" />
 
-    <ImageView
-        android:id="@+id/primaryHealthTech"
-        android:layout_width="103dp"
-        android:layout_height="46dp"
-        app:layout_constraintBottom_toTopOf="@+id/textView5"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mobilabLogo"
-        app:layout_constraintVertical_bias="0.916"
-        app:srcCompat="@drawable/primary_healthtech_logo" />
-
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="In Associated with:"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mobilabLogo"
-        app:layout_constraintVertical_bias="0.617" />
 </androidx.constraintlayout.widget.ConstraintLayout>
