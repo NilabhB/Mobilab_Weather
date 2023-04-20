@@ -14,4 +14,7 @@
     <string name="signin">Sign in?</string>
     <string name="password_recovery">Password Recovery</string>
     <string name="reset_password">Reset Password</string>
+    <string name="weather_report">Weather Report</string>
+    <string name="today_s_weather_forecast">Today\'s Weather Forecast</string>
+    <string name="city_name">City Name</string>
 </resources>

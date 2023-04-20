@@ -21,6 +21,14 @@ public class WeatherRVAdapter extends RecyclerView.Adapter<WeatherRVAdapter.View
     private Context context;
     private ArrayList<WeatherRVModel> weatherRVModelArrayList;
 
+    private boolean isFahrenheit = false;
+
+    public void toggleUnits(boolean isFahrenheit) {
+        this.isFahrenheit = isFahrenheit;
+        notifyDataSetChanged();
+    }
+
+
     public WeatherRVAdapter(Context context, ArrayList<WeatherRVModel> weatherRVModelArrayList) {
         this.context = context;
         this.weatherRVModelArrayList = weatherRVModelArrayList;
@@ -35,11 +43,25 @@ public class WeatherRVAdapter extends RecyclerView.Adapter<WeatherRVAdapter.View
 
     @Override
     public void onBindViewHolder(@NonNull WeatherRVAdapter.ViewHolder holder, int position) {
-
         WeatherRVModel model = weatherRVModelArrayList.get(position);
-        holder.temperatureTV.setText(model.getTemperature()+"°C");
+
+
+        double tempC = Double.parseDouble(model.getTemperature());
+        double tempF = Double.parseDouble(model.getTemperature());
+        String temperature = isFahrenheit ? String.format("%.1f°F", tempF) : String.format("%.1f°C", tempC);
+
+        holder.temperatureTV.setText(temperature);
+
+        double windKmph = Double.parseDouble(model.getWindSpeed());
+        double windMph = Double.parseDouble(model.getWindSpeed());
+        String windSpeed = isFahrenheit ? String.format("%.1f MPH", windMph) : String.format("%.1f Km/h", windKmph);
+
+        holder.windTV.setText(windSpeed);
+
+        // Setting the condition icon using Picasso
         Picasso.get().load("http:".concat(model.getIcon())).into(holder.conditionIV);
-        holder.windTV.setText(model.getWindSpeed()+"Km/h");
+
+        // Formatting the time string
         SimpleDateFormat input = new SimpleDateFormat("yyyy-MM-dd hh:mm");
         SimpleDateFormat output = new SimpleDateFormat("hh:mm aa");
         try {
@@ -48,8 +70,8 @@ public class WeatherRVAdapter extends RecyclerView.Adapter<WeatherRVAdapter.View
         } catch (ParseException e) {
             e.printStackTrace();
         }
-
     }
+
 
     @Override
     public int getItemCount() {
@@ -58,7 +80,7 @@ public class WeatherRVAdapter extends RecyclerView.Adapter<WeatherRVAdapter.View
 
     public class ViewHolder extends RecyclerView.ViewHolder{
 
-        private TextView windTV, temperatureTV, timeTV;
+        private TextView windTV, temperatureTV, timeTV, cityTV;
         private ImageView conditionIV;
 
         public ViewHolder(@NonNull View itemView) {
@@ -67,6 +89,7 @@ public class WeatherRVAdapter extends RecyclerView.Adapter<WeatherRVAdapter.View
             temperatureTV = itemView.findViewById(R.id.idTVTemperature);
             timeTV = itemView.findViewById(R.id.idTVTime);
             conditionIV = itemView.findViewById(R.id.idTVCondition);
+            cityTV = itemView.findViewById(R.id.idTVCityName);
         }
     }
 }

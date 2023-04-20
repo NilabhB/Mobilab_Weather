@@ -12,7 +12,7 @@
        android:layout_width="wrap_content"
        android:layout_height="wrap_content"
        android:layout_centerInParent="true"
-       android:visibility="visible"/>
+       android:visibility="gone"/>
     
     <RelativeLayout
         android:layout_width="match_parent"
@@ -26,27 +26,39 @@
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
             android:src="@color/black_shade_1"
-            android:alpha="0.7"
+            android:alpha="0.6"
             />
 
         <TextView
             android:id="@+id/idTVCityName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="35dp"
             android:gravity="center"
-            android:padding="20dp"
-            android:text="City Name"
+            android:paddingTop="15dp"
+            android:text="@string/city_name"
             android:textAlignment="center"
+            android:textColor="#FFFF00"
+            android:textSize="35sp" />
+
+        <TextView
+            android:id="@+id/idTVRegionCountry"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/idTVCityName"
+            android:text="Region, Country"
             android:textColor="	#FFFF00"
-            android:textSize="34sp" />
+            android:gravity="center"
+            android:textSize="15sp"
+            tools:ignore="RtlHardcoded" />
+
 
         <LinearLayout
             android:id="@+id/idLLEdt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_below="@id/idTVCityName"
+            android:layout_below="@id/idTVRegionCountry"
             android:weightSum="5"
             >
             <com.google.android.material.textfield.TextInputLayout
@@ -56,7 +68,7 @@
                 android:layout_margin="10dp"
                 android:layout_weight="4.5"
                 android:background="@android:color/transparent"
-                android:hint="Enter City/State Name"
+                android:hint="Enter City Name"
                 android:padding="5dp"
                 app:hintTextColor="@color/white"
                 android:textColorHint="@color/white"
@@ -71,17 +83,18 @@
                     android:inputType="text"
                     android:singleLine="true"
                     android:textColor="@color/white"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    android:imeOptions="actionSearch" />
 
             </com.google.android.material.textfield.TextInputLayout>
-            
+
             <ImageView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.5"
                 android:id="@+id/idTVSearch"
-                android:layout_margin="10dp"
+                android:layout_width="30dp"
+                android:layout_height="35dp"
                 android:layout_gravity="center"
+                android:layout_margin="10dp"
+                android:layout_weight="0.5"
                 android:background="@android:color/transparent"
                 android:src="@drawable/ic_search"
                 app:tint="@color/white" />
@@ -94,23 +107,63 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/idLLEdt"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="5dp"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="10dp"
             android:gravity="center_horizontal"
             android:padding="5dp"
             android:text="23"
             android:textColor="@color/white"
-            android:textSize="70sp" />
+            android:textSize="45sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/idLLFeelsLikeAndWindSpeed"
+            android:layout_below="@id/idTVTemperature"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:id="@+id/idTVFeelsLike"
+                android:text="Feels Like: "
+                android:textColor="@color/white"
+                android:gravity="end"
+                android:paddingEnd="5dp"
+                android:textSize="15sp" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="30dp"
+                android:layout_margin="8dp"
+                android:background="#FFFF00" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:id="@+id/idTVWindSpeed"
+                android:text="Wind Speed: "
+                android:textColor="@color/white"
+                android:gravity="start"
+                android:paddingStart="5dp"
+                android:textSize="15sp" />
+
+        </LinearLayout>
+
+
 
         <ImageView
             android:id="@+id/idIVIcon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/idTVTemperature"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:layout_below="@id/idLLFeelsLikeAndWindSpeed"
             android:layout_centerHorizontal="true"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="5dp"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="10dp"
             android:src="@mipmap/ic_launcher" />
@@ -121,13 +174,39 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/idIVIcon"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="1dp"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="10dp"
             android:gravity="center"
             android:text="Condition"
             android:textAlignment="center"
-            android:textColor="@color/white" />
+            android:textColor="@color/white"
+            android:textSize="17sp"/>
+
+        <Switch
+            android:id="@+id/tempSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/idTVCondition"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="5dp"
+            android:checked="false"
+            android:minWidth="48dp"
+            android:minHeight="48dp"
+            android:textOff="°C"
+            android:textOn="°F"
+            tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+        <TextView
+            android:id="@+id/switchLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tempSwitch"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="1dp"
+            android:text="Toggle Temp. Unit"
+            android:textColor="@color/white"
+            android:textSize="8sp" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/idRVWeather"
@@ -147,7 +226,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:gravity="center"
-            android:text="Today's Weather Forecast"
+            android:text="@string/today_s_weather_forecast"
             android:textColor="	#FFFF00"
             android:textSize="16sp"
             android:textStyle="bold" />
@@ -156,17 +235,18 @@
             android:id="@+id/idTVweatherReport"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_above="@id/idTVweatherForecast"
+            android:layout_below="@id/switchLabel"
             android:layout_alignParentStart="true"
             android:layout_alignParentEnd="true"
             android:layout_marginStart="120dp"
-            android:layout_marginTop="54dp"
+            android:layout_marginTop="20dp"
             android:layout_marginEnd="128dp"
             android:layout_marginBottom="112dp"
             android:gravity="center"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            android:text="Weather Report"
+            android:drawablePadding="0dp"
+            android:text="@string/weather_report"
             android:textColor="	#FFFF00"
             android:textSize="14sp"
             android:textStyle="bold"
@@ -174,10 +254,15 @@
 
         <ImageView
             android:id="@+id/logOut"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_above="@id/idTVweatherForecast"
-            android:layout_marginBottom="25dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="1dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
+
             app:srcCompat="@drawable/baseline_logout_24" />
 
 

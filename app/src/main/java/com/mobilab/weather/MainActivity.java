@@ -1,11 +1,14 @@
 package com.mobilab.weather;
 
+import static android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -17,12 +20,15 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
+import android.view.inputmethod.EditorInfo;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,8 +38,15 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -55,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
 
     private RelativeLayout homeRL;
     private ProgressBar loadingPB;
-    private TextView cityNameTV, temperatureTV, conditionTV, weatherReportTV;
+    private TextView cityNameTV, regionCountryTV, temperatureTV, conditionTV, weatherReportTV, feelsLikeTV, windSpeedTV;
     private TextInputEditText cityEdt;
     private ImageView backIV, iconIV, searchIV, logOutIV;
     private RecyclerView weatherRV;
@@ -65,18 +78,25 @@ public class MainActivity extends AppCompatActivity {
     private int PERMISSION_CODE = 1;
     private String cityName;
 
+    private boolean isFahrenheit = false;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
         setContentView(R.layout.activity_main);
+        setRequestedOrientation(SCREEN_ORIENTATION_PORTRAIT);
         //Objects.requireNonNull(getSupportActionBar()).hide();
 
         homeRL = findViewById(R.id.idRLHome);
         loadingPB = findViewById(R.id.idPBLoading);
         cityNameTV = findViewById(R.id.idTVCityName);
+        regionCountryTV = findViewById(R.id.idTVRegionCountry);
         temperatureTV = findViewById(R.id.idTVTemperature);
+        feelsLikeTV = findViewById(R.id.idTVFeelsLike);
+        windSpeedTV = findViewById(R.id.idTVWindSpeed);
         conditionTV = findViewById(R.id.idTVCondition);
         weatherRV = findViewById(R.id.idRVWeather);
         cityEdt = findViewById(R.id.idEditCity);
@@ -85,6 +105,34 @@ public class MainActivity extends AppCompatActivity {
         searchIV = findViewById(R.id.idTVSearch);
         weatherReportTV = findViewById(R.id.idTVweatherReport);
         logOutIV = findViewById(R.id.logOut);
+
+
+        cityEdt.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    String city = Objects.requireNonNull(cityEdt.getText()).toString();
+                    cityEdt.setText("");
+                    if (city.isEmpty()) {
+                        Toast.makeText(MainActivity.this, "Please Enter City Name!", Toast.LENGTH_SHORT).show();
+                    } else {
+                        //cityNameTV.setText(city);
+                        cityName = city; // Update the cityName variable
+                        getWeatherInfo(city);
+                    }
+                    return true;
+                }
+                return false;
+            }
+        });
+
+
+        @SuppressLint("UseSwitchCompatOrMaterialCode") Switch tempSwitch = findViewById(R.id.tempSwitch);
+        tempSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            isFahrenheit = isChecked;
+            getWeatherInfo(cityName);
+            weatherRVAdapter.toggleUnits(isChecked);
+        });
 
         weatherRVModelArrayList = new ArrayList<>();
         weatherRVAdapter = new WeatherRVAdapter(this, weatherRVModelArrayList);
@@ -102,8 +150,24 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 view.startAnimation(buttonClick);
-                FirebaseAuth.getInstance().signOut();
-                startActivity(new Intent(MainActivity.this, SignInActivity.class));
+                new AlertDialog.Builder(MainActivity.this)
+                        .setIcon(R.drawable.baseline_logout_24)
+                        .setTitle("Log Out!")
+                        .setMessage("Are you sure you want to log out?")
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                FirebaseAuth.getInstance().signOut();
+                                startActivity(new Intent(MainActivity.this, SignInActivity.class));
+                            }
+                        })
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .show();
             }
         });
 
@@ -121,18 +185,20 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 // Couldn't get location, show message or provide a default location
                 Toast.makeText(this, "Could not get your location, please provide a location or try again later", Toast.LENGTH_LONG).show();
-                getWeatherInfo("Delhi");
+                getWeatherInfo("New Delhi");
             }
         }
 
         searchIV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String city = cityEdt.getText().toString();
+                String city = Objects.requireNonNull(cityEdt.getText()).toString();
+                cityEdt.setText("");
                 if(city.isEmpty()) {
                     Toast.makeText(MainActivity.this, "Please Enter City Name!", Toast.LENGTH_SHORT).show();
                 } else {
-                    cityNameTV.setText(city);
+                   // cityNameTV.setText(city);
+                    cityName = city; // Update the cityName variable
                     getWeatherInfo(city);
                 }
             }
@@ -145,7 +211,7 @@ public class MainActivity extends AppCompatActivity {
         String currentDate = getCurrentDateString();
 
         weatherReport.append("Weather Report for ");
-        weatherReport.append(cityNameTV.getText());
+        weatherReport.append(cityNameTV.getText()).append(", ").append(regionCountryTV.getText());
         weatherReport.append(" on ");
         weatherReport.append(currentDate);
         weatherReport.append("\n\n");
@@ -159,17 +225,70 @@ public class MainActivity extends AppCompatActivity {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            weatherReport.append("Temperature: ").append(model.getTemperature()).append("°C\n");
-            weatherReport.append("Wind Speed: ").append(model.getWindSpeed()).append(" Km/h\n");
+
+            String temperature = model.getTemperature();
+            if (isFahrenheit) {
+                double tempC = Double.parseDouble(temperature);
+                double tempF = (tempC * 9 / 5) + 32;
+                temperature = String.format("%.1f°F", tempF);
+            } else {
+                temperature = temperature + "°C";
+            }
+            weatherReport.append("Temperature: ").append(temperature).append("\n");
+
+            String windSpeed = model.getWindSpeed();
+            if (isFahrenheit) {
+                double windKmph = Double.parseDouble(windSpeed);
+                double windMph = windKmph / 1.609;
+                windSpeed = String.format("%.1f MPH", windMph);
+            } else {
+                windSpeed = windSpeed + " Km/h";
+            }
+            weatherReport.append("Wind Speed: ").append(windSpeed).append("\n");
+
             weatherReport.append("\n");
         }
 
-        Intent shareIntent = new Intent(Intent.ACTION_SEND);
-        shareIntent.setType("text/plain");
-        shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Weather Report");
-        shareIntent.putExtra(Intent.EXTRA_TEXT, weatherReport.toString());
-        startActivity(Intent.createChooser(shareIntent, "Share Weather Report"));
+        getCurrentUserName().addOnCompleteListener(new OnCompleteListener<String>() {
+            @Override
+            public void onComplete(@NonNull Task<String> task) {
+                if (task.isSuccessful()) {
+                    String userName = task.getResult();
+                    if (userName != null) {
+                        weatherReport.append("Shared by: ").append(userName).append("\n");
+                    }
+                }
+
+                Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                shareIntent.setType("text/plain");
+                shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Weather Report");
+                shareIntent.putExtra(Intent.EXTRA_TEXT, weatherReport.toString());
+                startActivity(Intent.createChooser(shareIntent, "Share Weather Report"));
+            }
+        });
     }
+
+
+    private Task<String> getCurrentUserName() {
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseFirestore database = FirebaseFirestore.getInstance();
+        DocumentReference reference = database.collection("Users").document(firebaseUser.getUid());
+
+        return reference.get().continueWith(new Continuation<DocumentSnapshot, String>() {
+            @Override
+            public String then(@NonNull Task<DocumentSnapshot> task) throws Exception {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot documentSnapshot = task.getResult();
+                    if (documentSnapshot.exists()) {
+                        return documentSnapshot.getString("name");
+                    }
+                }
+                return null;
+            }
+        });
+    }
+
+
 
 
 
@@ -217,24 +336,14 @@ public class MainActivity extends AppCompatActivity {
         return cityName;
     }
 
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
-        if (hasFocus) {
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
-            if (getSupportActionBar() != null) {
-                getSupportActionBar().hide();
-            }
-        }
-    }
 
-
-    private void getWeatherInfo (String cityName) {
+    private void getWeatherInfo(String cityName) {
         String url = "http://api.weatherapi.com/v1/forecast.json?key=f9823e702b4e405fbaa52927232803&q=" + cityName + "&days=1&aqi=yes&alerts=yes";
-        cityNameTV.setText(cityName);
+        //cityNameTV.setText(cityName);
         RequestQueue requestQueue = Volley.newRequestQueue(MainActivity.this);
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+            @SuppressLint("SetTextI18n")
             @Override
             public void onResponse(JSONObject response) {
                 loadingPB.setVisibility(View.GONE);
@@ -243,13 +352,40 @@ public class MainActivity extends AppCompatActivity {
 
                 try {
                     String temperature = response.getJSONObject("current").getString("temp_c");
-                    temperatureTV.setText(temperature+"°C");
-                    int isDay = response.getJSONObject("current").getInt("is_day");
+                    double temperC = Double.parseDouble(temperature);
+                    double temperF = (temperC * 9 / 5) + 32;
+                    String temperatureText = isFahrenheit ? String.format("%.1f °F", temperF) : String.format("%.1f °C", temperC);
+                    temperatureTV.setText(temperatureText);
+
+                    String feelsLikeTemp = response.getJSONObject("current").getString("feelslike_c");
+                    double tempFeelsLikeC = Double.parseDouble(feelsLikeTemp);
+                    double tempFeelsLikeF = (tempFeelsLikeC * 9 / 5) + 32;
+                    String temperatureTextFeelsLike = isFahrenheit ? String.format("%.1f °F", tempFeelsLikeF) : String.format("%.1f °C", tempFeelsLikeC);
+                    feelsLikeTV.setText("Feels Like: " + temperatureTextFeelsLike);
+
+                    String WindSpeed = response.getJSONObject("current").getString("wind_kph");
+                    double windSpeedKMh = Double.parseDouble(WindSpeed);
+                    double windSpeedMPH = windSpeedKMh / 1.609;
+                    String WindSpeedText = isFahrenheit ? String.format("%.1f MPH", windSpeedMPH) : String.format("%.1f Km/h", windSpeedKMh);
+                    windSpeedTV.setText("Wind Speed: " + WindSpeedText);
+
+                    String city = response.getJSONObject("location").getString("name");
+                    cityNameTV.setText(city);
+
+                    String region = response.getJSONObject("location").getString("region").concat(", ");
+                   // regionTV.setText(region);
+
+                    String country = response.getJSONObject("location").getString("country");
+                    regionCountryTV.setText(region + country);
+
                     String condition = response.getJSONObject("current").getJSONObject("condition").getString("text");
+                    conditionTV.setText(condition);
+
                     String conditionIcon = response.getJSONObject("current").getJSONObject("condition").getString("icon");
                     Picasso.get().load("http:".concat(conditionIcon)).into(iconIV);
-                    conditionTV.setText(condition);
-                    if(isDay==1) {
+
+                    int isDay = response.getJSONObject("current").getInt("is_day");
+                    if (isDay == 1) {
                         //Daytime picture
                         Picasso.get().load("https://unsplash.com/photos/NAVi0Eyia8w/download?ixid=MnwxMjA3fDB8MXxzZWFyY2h8MTZ8fHNreSUyMGJhY2tncm91bmR8ZW58MHx8fHwxNjgwMzE4MjE5&force=true").into(backIV);
                     } else {
@@ -261,16 +397,30 @@ public class MainActivity extends AppCompatActivity {
                     JSONObject forcast0 = forecastObj.getJSONArray("forecastday").getJSONObject(0);
                     JSONArray hourArray = forcast0.getJSONArray("hour");
 
-                    for(int i=0; i<hourArray.length(); i++) {
+                    for (int i = 0; i < hourArray.length(); i++) {
                         JSONObject hourObj = hourArray.getJSONObject(i);
                         String time = hourObj.getString("time");
-                        String temper = hourObj.getString("temp_c");
+
+                        String tempC = hourObj.getString("temp_c");
+                        double tempC_double = Double.parseDouble(tempC);
+                        temperature = tempC;
+                        if (isFahrenheit) {
+                            double tempF = (tempC_double * 9 / 5) + 32;
+                            temperature = String.format("%.1f", tempF);
+                        }
+
+                        String windKmph = hourObj.getString("wind_kph");
+                        double windKmph_double = Double.parseDouble(windKmph);
+                        String windSpeed = windKmph;
+                        if (isFahrenheit) {
+                            double windMph = windKmph_double/ 1.609;
+                            windSpeed = String.format("%.1f", windMph);
+                        }
+
                         String img = hourObj.getJSONObject("condition").getString("icon");
-                        String wind = hourObj.getString("wind_kph");
-                        weatherRVModelArrayList.add(new WeatherRVModel(time, temper, img, wind));
+                        weatherRVModelArrayList.add(new WeatherRVModel(time, temperature, img, windSpeed));
                     }
                     weatherRVAdapter.notifyDataSetChanged();
-
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -285,8 +435,9 @@ public class MainActivity extends AppCompatActivity {
         });
 
         requestQueue.add(jsonObjectRequest);
-
     }
+
+
 
     private final AlphaAnimation buttonClick = new AlphaAnimation(1F, 0.5F);
 
