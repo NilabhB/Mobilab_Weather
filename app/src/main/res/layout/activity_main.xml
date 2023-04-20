@@ -26,7 +26,7 @@
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
             android:src="@color/black_shade_1"
-            android:alpha="0.7"
+            android:alpha="0.6"
             />
 
         <TextView
@@ -38,7 +38,7 @@
             android:paddingTop="20dp"
             android:text="@string/city_name"
             android:textAlignment="center"
-            android:textColor="	#FFFF00"
+            android:textColor="#FFFF00"
             android:textSize="34sp" />
 
         <TextView
@@ -68,7 +68,7 @@
                 android:layout_margin="10dp"
                 android:layout_weight="4.5"
                 android:background="@android:color/transparent"
-                android:hint="Enter City/State Name"
+                android:hint="Enter City Name"
                 android:padding="5dp"
                 app:hintTextColor="@color/white"
                 android:textColorHint="@color/white"
@@ -121,16 +121,39 @@
             android:layout_height="wrap_content"
             android:id="@+id/idLLFeelsLikeAndWindSpeed"
             android:layout_below="@id/idTVTemperature"
-            >
+            android:orientation="horizontal"
+            android:gravity="center">
+
             <TextView
-                android:layout_width="200dp"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:id="@+id/idTVFeelsLike"
                 android:text="Feels Like: "
                 android:textColor="@color/white"
-                android:gravity="right"
+                android:gravity="end"
+                android:paddingEnd="5dp"
+                android:textSize="15sp" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="30dp"
+                android:layout_margin="8dp"
+                android:background="#FFFF00" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:id="@+id/idTVWindSpeed"
+                android:text="Wind Speed: "
+                android:textColor="@color/white"
+                android:gravity="start"
+                android:paddingStart="5dp"
+                android:textSize="15sp" />
 
         </LinearLayout>
+
 
 
         <ImageView
@@ -140,7 +163,7 @@
             android:layout_below="@id/idLLFeelsLikeAndWindSpeed"
             android:layout_centerHorizontal="true"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="15dp"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="10dp"
             android:src="@mipmap/ic_launcher" />
@@ -151,13 +174,14 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/idIVIcon"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="1dp"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="10dp"
             android:gravity="center"
             android:text="Condition"
             android:textAlignment="center"
-            android:textColor="@color/white" />
+            android:textColor="@color/white"
+            android:textSize="15sp"/>
 
         <Switch
             android:id="@+id/tempSwitch"
@@ -172,6 +196,17 @@
             android:textOff="°C"
             android:textOn="°F"
             tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+        <TextView
+            android:id="@+id/switchLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tempSwitch"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="1dp"
+            android:text="Toggle Temperature Unit"
+            android:textColor="@color/white"
+            android:textSize="10sp" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/idRVWeather"
@@ -200,11 +235,11 @@
             android:id="@+id/idTVweatherReport"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-           android:layout_below="@id/tempSwitch"
+            android:layout_below="@id/switchLabel"
             android:layout_alignParentStart="true"
             android:layout_alignParentEnd="true"
             android:layout_marginStart="120dp"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="20dp"
             android:layout_marginEnd="128dp"
             android:layout_marginBottom="112dp"
             android:gravity="center"
@@ -218,10 +253,15 @@
 
         <ImageView
             android:id="@+id/logOut"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_above="@id/idTVweatherForecast"
-            android:layout_marginBottom="25dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="1dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
+
             app:srcCompat="@drawable/baseline_logout_24" />
 
 

@@ -38,8 +38,15 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -61,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
 
     private RelativeLayout homeRL;
     private ProgressBar loadingPB;
-    private TextView cityNameTV, regionCountryTV, temperatureTV, conditionTV, weatherReportTV;
+    private TextView cityNameTV, regionCountryTV, temperatureTV, conditionTV, weatherReportTV, feelsLikeTV, windSpeedTV;
     private TextInputEditText cityEdt;
     private ImageView backIV, iconIV, searchIV, logOutIV;
     private RecyclerView weatherRV;
@@ -88,6 +95,8 @@ public class MainActivity extends AppCompatActivity {
         cityNameTV = findViewById(R.id.idTVCityName);
         regionCountryTV = findViewById(R.id.idTVRegionCountry);
         temperatureTV = findViewById(R.id.idTVTemperature);
+        feelsLikeTV = findViewById(R.id.idTVFeelsLike);
+        windSpeedTV = findViewById(R.id.idTVWindSpeed);
         conditionTV = findViewById(R.id.idTVCondition);
         weatherRV = findViewById(R.id.idRVWeather);
         cityEdt = findViewById(R.id.idEditCity);
@@ -103,6 +112,7 @@ public class MainActivity extends AppCompatActivity {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                     String city = Objects.requireNonNull(cityEdt.getText()).toString();
+                    cityEdt.setText("");
                     if (city.isEmpty()) {
                         Toast.makeText(MainActivity.this, "Please Enter City Name!", Toast.LENGTH_SHORT).show();
                     } else {
@@ -140,8 +150,24 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 view.startAnimation(buttonClick);
-                FirebaseAuth.getInstance().signOut();
-                startActivity(new Intent(MainActivity.this, SignInActivity.class));
+                new AlertDialog.Builder(MainActivity.this)
+                        .setIcon(R.drawable.baseline_logout_24)
+                        .setTitle("Log Out!")
+                        .setMessage("Are you sure you want to log out?")
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                FirebaseAuth.getInstance().signOut();
+                                startActivity(new Intent(MainActivity.this, SignInActivity.class));
+                            }
+                        })
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .show();
             }
         });
 
@@ -159,7 +185,7 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 // Couldn't get location, show message or provide a default location
                 Toast.makeText(this, "Could not get your location, please provide a location or try again later", Toast.LENGTH_LONG).show();
-                getWeatherInfo("Delhi");
+                getWeatherInfo("New Delhi");
             }
         }
 
@@ -167,6 +193,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String city = Objects.requireNonNull(cityEdt.getText()).toString();
+                cityEdt.setText("");
                 if(city.isEmpty()) {
                     Toast.makeText(MainActivity.this, "Please Enter City Name!", Toast.LENGTH_SHORT).show();
                 } else {
@@ -222,12 +249,45 @@ public class MainActivity extends AppCompatActivity {
             weatherReport.append("\n");
         }
 
-        Intent shareIntent = new Intent(Intent.ACTION_SEND);
-        shareIntent.setType("text/plain");
-        shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Weather Report");
-        shareIntent.putExtra(Intent.EXTRA_TEXT, weatherReport.toString());
-        startActivity(Intent.createChooser(shareIntent, "Share Weather Report"));
+        getCurrentUserName().addOnCompleteListener(new OnCompleteListener<String>() {
+            @Override
+            public void onComplete(@NonNull Task<String> task) {
+                if (task.isSuccessful()) {
+                    String userName = task.getResult();
+                    if (userName != null) {
+                        weatherReport.append("Shared by: ").append(userName).append("\n");
+                    }
+                }
+
+                Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                shareIntent.setType("text/plain");
+                shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Weather Report");
+                shareIntent.putExtra(Intent.EXTRA_TEXT, weatherReport.toString());
+                startActivity(Intent.createChooser(shareIntent, "Share Weather Report"));
+            }
+        });
     }
+
+
+    private Task<String> getCurrentUserName() {
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseFirestore database = FirebaseFirestore.getInstance();
+        DocumentReference reference = database.collection("Users").document(firebaseUser.getUid());
+
+        return reference.get().continueWith(new Continuation<DocumentSnapshot, String>() {
+            @Override
+            public String then(@NonNull Task<DocumentSnapshot> task) throws Exception {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot documentSnapshot = task.getResult();
+                    if (documentSnapshot.exists()) {
+                        return documentSnapshot.getString("name");
+                    }
+                }
+                return null;
+            }
+        });
+    }
+
 
 
 
@@ -283,6 +343,7 @@ public class MainActivity extends AppCompatActivity {
         RequestQueue requestQueue = Volley.newRequestQueue(MainActivity.this);
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+            @SuppressLint("SetTextI18n")
             @Override
             public void onResponse(JSONObject response) {
                 loadingPB.setVisibility(View.GONE);
@@ -291,10 +352,22 @@ public class MainActivity extends AppCompatActivity {
 
                 try {
                     String temperature = response.getJSONObject("current").getString("temp_c");
-                    double tempCTV = Double.parseDouble(temperature);
-                    double tempFTV = (tempCTV * 9 / 5) + 32;
-                    String temperatureText = isFahrenheit ? String.format("%.1f°F", tempFTV) : String.format("%.1f°C", tempCTV);
+                    double temperC = Double.parseDouble(temperature);
+                    double temperF = (temperC * 9 / 5) + 32;
+                    String temperatureText = isFahrenheit ? String.format("%.1f °F", temperF) : String.format("%.1f °C", temperC);
                     temperatureTV.setText(temperatureText);
+
+                    String feelsLikeTemp = response.getJSONObject("current").getString("feelslike_c");
+                    double tempFeelsLikeC = Double.parseDouble(feelsLikeTemp);
+                    double tempFeelsLikeF = (tempFeelsLikeC * 9 / 5) + 32;
+                    String temperatureTextFeelsLike = isFahrenheit ? String.format("%.1f °F", tempFeelsLikeF) : String.format("%.1f °C", tempFeelsLikeC);
+                    feelsLikeTV.setText("Feels Like: " + temperatureTextFeelsLike);
+
+                    String WindSpeed = response.getJSONObject("current").getString("wind_kph");
+                    double windSpeedKMh = Double.parseDouble(WindSpeed);
+                    double windSpeedMPH = windSpeedKMh / 1.609;
+                    String WindSpeedText = isFahrenheit ? String.format("%.1f MPH", windSpeedMPH) : String.format("%.1f Km/h", windSpeedKMh);
+                    windSpeedTV.setText("Wind Speed: " + WindSpeedText);
 
                     String city = response.getJSONObject("location").getString("name");
                     cityNameTV.setText(city);
