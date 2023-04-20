@@ -35,11 +35,11 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="35dp"
             android:gravity="center"
-            android:paddingTop="20dp"
+            android:paddingTop="15dp"
             android:text="@string/city_name"
             android:textAlignment="center"
             android:textColor="#FFFF00"
-            android:textSize="34sp" />
+            android:textSize="35sp" />
 
         <TextView
             android:id="@+id/idTVRegionCountry"
@@ -107,14 +107,14 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/idLLEdt"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="5dp"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="10dp"
             android:gravity="center_horizontal"
             android:padding="5dp"
             android:text="23"
             android:textColor="@color/white"
-            android:textSize="50sp" />
+            android:textSize="45sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -163,7 +163,7 @@
             android:layout_below="@id/idLLFeelsLikeAndWindSpeed"
             android:layout_centerHorizontal="true"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="5dp"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="10dp"
             android:src="@mipmap/ic_launcher" />
@@ -181,7 +181,7 @@
             android:text="Condition"
             android:textAlignment="center"
             android:textColor="@color/white"
-            android:textSize="15sp"/>
+            android:textSize="17sp"/>
 
         <Switch
             android:id="@+id/tempSwitch"
@@ -189,7 +189,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/idTVCondition"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="5dp"
             android:checked="false"
             android:minWidth="48dp"
             android:minHeight="48dp"
@@ -204,9 +204,9 @@
             android:layout_below="@+id/tempSwitch"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="1dp"
-            android:text="Toggle Temperature Unit"
+            android:text="Toggle Temp. Unit"
             android:textColor="@color/white"
-            android:textSize="10sp" />
+            android:textSize="8sp" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/idRVWeather"
@@ -245,6 +245,7 @@
             android:gravity="center"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
+            android:drawablePadding="0dp"
             android:text="@string/weather_report"
             android:textColor="	#FFFF00"
             android:textSize="14sp"
