@@ -117,42 +117,60 @@
             android:textSize="45sp" />
 
         <LinearLayout
+            android:id="@+id/idLLFeelsLikeAndWindSpeed"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/idLLFeelsLikeAndWindSpeed"
             android:layout_below="@id/idTVTemperature"
-            android:orientation="horizontal"
-            android:gravity="center">
+            android:gravity="center"
+            android:orientation="horizontal">
 
             <TextView
+                android:id="@+id/idTVFeelsLike"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:id="@+id/idTVFeelsLike"
-                android:text="Feels Like: "
-                android:textColor="@color/white"
                 android:gravity="end"
                 android:paddingEnd="5dp"
-                android:textSize="15sp" />
+                android:text="Feels Like: "
+                android:textColor="@color/white"
+                android:textSize="18sp" />
 
             <View
                 android:layout_width="1dp"
-                android:layout_height="30dp"
+                android:layout_height="40dp"
                 android:layout_margin="8dp"
                 android:background="#FFFF00" />
 
-            <TextView
+            <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:id="@+id/idTVWindSpeed"
-                android:text="Wind Speed: "
-                android:textColor="@color/white"
-                android:gravity="start"
-                android:paddingStart="5dp"
-                android:textSize="15sp" />
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/idTVWindSpeed"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:paddingStart="5dp"
+                    android:text="Wind Speed: "
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/idTVHumidity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:paddingStart="5dp"
+                    android:text="Humidity: "
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
 
         </LinearLayout>
+
 
 
 

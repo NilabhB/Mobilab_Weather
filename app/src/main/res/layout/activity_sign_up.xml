@@ -9,7 +9,7 @@
 
     <TextView
         android:id="@+id/nameText"
-        android:textColor="@color/white"
+        android:textColor="#FFFF00"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
@@ -26,7 +26,7 @@
 
     <EditText
         android:id="@+id/userName"
-        android:textColor="@color/white"
+        android:textColor="#FFFF00"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginStart="20dp"
@@ -47,7 +47,7 @@
 
     <EditText
         android:id="@+id/passwordBox"
-        android:textColor="@color/white"
+        android:textColor="#FFFF00"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginStart="20dp"
@@ -68,7 +68,7 @@
 
     <EditText
         android:id="@+id/emailBox"
-        android:textColor="@color/white"
+        android:textColor="#FFFF00"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginStart="20dp"
@@ -89,7 +89,7 @@
 
     <TextView
         android:id="@+id/txt_email"
-        android:textColor="@color/white"
+        android:textColor="#FFFF00"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="19dp"
@@ -106,7 +106,7 @@
         android:id="@+id/txt_password"
         android:layout_width="wrap_content"
         android:layout_height="20dp"
-        android:textColor="@color/white"
+        android:textColor="#FFFF00"
         android:layout_marginTop="19dp"
         android:layout_marginBottom="6dp"
         android:text="@string/password"
@@ -120,7 +120,7 @@
 
     <EditText
         android:id="@+id/passwordBox2"
-        android:textColor="@color/white"
+        android:textColor="#FFFF00"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginStart="20dp"
@@ -156,7 +156,7 @@
         android:id="@+id/reEnterPassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/white"
+        android:textColor="#FFFF00"
         android:layout_marginTop="19dp"
         android:layout_marginBottom="6dp"
         android:text="@string/re_enter_password"
@@ -173,7 +173,7 @@
         android:layout_height="50dp"
         android:background="@drawable/button"
         android:text="@string/sign_up"
-        android:textColor="#FFFFFF"
+        android:textColor="#FFFF00"
         android:textSize="15sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -202,7 +202,7 @@
         android:padding="10dp"
         android:text="@string/signin"
         android:textAlignment="center"
-        android:textColor="#0F86E4"
+        android:textColor="#FFFF00"
         android:textSize="16sp"
         app:drawableLeftCompat="@drawable/baseline_login_24"
         app:layout_constraintBottom_toBottomOf="parent"

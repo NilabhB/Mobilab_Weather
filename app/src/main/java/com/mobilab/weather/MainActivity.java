@@ -38,6 +38,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -68,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
 
     private RelativeLayout homeRL;
     private ProgressBar loadingPB;
-    private TextView cityNameTV, regionCountryTV, temperatureTV, conditionTV, weatherReportTV, feelsLikeTV, windSpeedTV;
+    private TextView cityNameTV, regionCountryTV, temperatureTV, conditionTV, weatherReportTV, feelsLikeTV, windSpeedTV, humidityTV;
     private TextInputEditText cityEdt;
     private ImageView backIV, iconIV, searchIV, logOutIV;
     private RecyclerView weatherRV;
@@ -97,6 +99,7 @@ public class MainActivity extends AppCompatActivity {
         temperatureTV = findViewById(R.id.idTVTemperature);
         feelsLikeTV = findViewById(R.id.idTVFeelsLike);
         windSpeedTV = findViewById(R.id.idTVWindSpeed);
+        humidityTV = findViewById(R.id.idTVHumidity);
         conditionTV = findViewById(R.id.idTVCondition);
         weatherRV = findViewById(R.id.idRVWeather);
         cityEdt = findViewById(R.id.idEditCity);
@@ -105,6 +108,11 @@ public class MainActivity extends AppCompatActivity {
         searchIV = findViewById(R.id.idTVSearch);
         weatherReportTV = findViewById(R.id.idTVweatherReport);
         logOutIV = findViewById(R.id.logOut);
+
+
+        YoYo.with(Techniques.Flash).duration(1200).repeat(0).playOn(iconIV);
+
+
 
 
         cityEdt.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -146,7 +154,8 @@ public class MainActivity extends AppCompatActivity {
                 String currentTemperature = temperatureTV.getText().toString();
                 String feelsLikeTemperature = feelsLikeTV.getText().toString().substring(11);
                 String currentWindSpeed = windSpeedTV.getText().toString().substring(12);
-                shareWeatherReport(currentTime, currentTemperature, feelsLikeTemperature, currentWindSpeed);
+                String currentHumidity = humidityTV.getText().toString().substring(9);
+                shareWeatherReport(currentTime, currentTemperature, feelsLikeTemperature, currentWindSpeed, currentHumidity);
             }
         });
 
@@ -210,7 +219,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void shareWeatherReport(String currentTime, String currentTemperature, String feelsLikeTemperature, String currentWindSpeed) {
+    private void shareWeatherReport(String currentTime, String currentTemperature, String feelsLikeTemperature, String currentWindSpeed, String currentHumidity) {
         StringBuilder weatherReport = new StringBuilder();
         String currentDate = getCurrentDateString();
 
@@ -223,7 +232,8 @@ public class MainActivity extends AppCompatActivity {
         weatherReport.append("Instant Time: ").append(currentTime).append("\n");
         weatherReport.append("Current Temperature: ").append(currentTemperature).append("\n");
         weatherReport.append("Feels Like: ").append(feelsLikeTemperature).append("\n");
-        weatherReport.append("Wind Speed: ").append(currentWindSpeed).append("\n\n\n");
+        weatherReport.append("Wind Speed: ").append(currentWindSpeed).append("\n");
+        weatherReport.append("Humidity: ").append(currentHumidity).append("\n\n\n");
 
         weatherReport.append("Hourly Weather Forecast:\n\n");
 
@@ -377,6 +387,9 @@ public class MainActivity extends AppCompatActivity {
                     double windSpeedMPH = windSpeedKMh / 1.609;
                     String WindSpeedText = isFahrenheit ? String.format("%.1f MPH", windSpeedMPH) : String.format("%.1f Km/h", windSpeedKMh);
                     windSpeedTV.setText("Wind Speed: " + WindSpeedText);
+
+                    String humidity = response.getJSONObject("current").getString("humidity");
+                    humidityTV.setText("Humidity: " + humidity);
 
                     String city = response.getJSONObject("location").getString("name");
                     cityNameTV.setText(city);

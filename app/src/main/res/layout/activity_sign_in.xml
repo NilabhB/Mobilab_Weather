@@ -21,7 +21,7 @@
 
     <EditText
         android:id="@+id/emailBox"
-        android:textColor="@color/white"
+        android:textColor="#FFFF00"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginStart="20dp"
@@ -44,7 +44,7 @@
         android:id="@+id/txt_password"
         android:layout_width="wrap_content"
         android:layout_height="20dp"
-        android:textColor="@color/white"
+        android:textColor="#FFFF00"
         android:layout_marginTop="19dp"
         android:layout_marginBottom="6dp"
         android:text="@string/password"
@@ -58,7 +58,7 @@
 
     <EditText
         android:id="@+id/passwordBox"
-        android:textColor="@color/white"
+        android:textColor="#FFFF00"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginStart="20dp"
@@ -79,7 +79,7 @@
 
     <TextView
         android:id="@+id/forgotPasswordtv"
-        android:textColor="@color/white"
+        android:textColor="#FFFF00"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/forgot_password"
@@ -93,7 +93,7 @@
 
     <TextView
         android:id="@+id/txt_email"
-        android:textColor="@color/white"
+        android:textColor="#FFFF00"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="4dp"
@@ -114,7 +114,7 @@
         android:layout_marginBottom="184dp"
         android:background="@drawable/button"
         android:text="@string/sign_in"
-        android:textColor="#FFFFFF"
+        android:textColor="#FFFF00"
         android:textSize="15sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -143,7 +143,7 @@
         android:padding="10dp"
         android:text="@string/don_t_have_an_account"
         android:textAlignment="center"
-        android:textColor="#0F86E4"
+        android:textColor="#FFFF00"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

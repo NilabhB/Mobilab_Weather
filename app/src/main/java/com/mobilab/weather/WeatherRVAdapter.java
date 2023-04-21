@@ -10,6 +10,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 import com.squareup.picasso.Picasso;
 
 import java.text.ParseException;
@@ -45,7 +47,6 @@ public class WeatherRVAdapter extends RecyclerView.Adapter<WeatherRVAdapter.View
     public void onBindViewHolder(@NonNull WeatherRVAdapter.ViewHolder holder, int position) {
         WeatherRVModel model = weatherRVModelArrayList.get(position);
 
-
         double tempC = Double.parseDouble(model.getTemperature());
         double tempF = Double.parseDouble(model.getTemperature());
         String temperature = isFahrenheit ? String.format("%.1f°F", tempF) : String.format("%.1f°C", tempC);
@@ -70,6 +71,8 @@ public class WeatherRVAdapter extends RecyclerView.Adapter<WeatherRVAdapter.View
         } catch (ParseException e) {
             e.printStackTrace();
         }
+
+        YoYo.with(Techniques.FlipInY).duration(2000).repeat(0).playOn(holder.itemView);
     }
 
 
