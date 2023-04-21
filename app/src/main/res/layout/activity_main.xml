@@ -136,6 +136,7 @@
                 android:textSize="18sp" />
 
             <View
+                android:id="@+id/separation"
                 android:layout_width="1dp"
                 android:layout_height="40dp"
                 android:layout_margin="8dp"

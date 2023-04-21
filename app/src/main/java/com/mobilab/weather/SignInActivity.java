@@ -37,10 +37,10 @@ public class SignInActivity extends AppCompatActivity {
 
     EditText emailBox, passwordBox;
     Button signInBtn;
-    TextView createAcTextView, forgotPassword;
+    TextView createAcTextView, forgotPassword, email, password;
     FirebaseAuth auth;
     ProgressDialog dialog;
-    ImageView passwordEye;
+    ImageView passwordEye, logo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,10 +61,22 @@ public class SignInActivity extends AppCompatActivity {
         createAcTextView = findViewById(R.id.createAcTextView);
         forgotPassword = findViewById(R.id.forgotPasswordtv);
         passwordEye = findViewById(R.id.passwordEye);
+        logo =findViewById(R.id.image_view);
+        email = findViewById(R.id.txt_email);
+        password = findViewById(R.id.txt_password);
 
 
 
         YoYo.with(Techniques.FlipInY).duration(1500).repeat(3).playOn(passwordEye);
+        YoYo.with(Techniques.Landing).duration(2000).repeat(0).playOn(passwordBox);
+        YoYo.with(Techniques.Landing).duration(2000).repeat(0).playOn(emailBox);
+        YoYo.with(Techniques.Landing).duration(2000).repeat(0).playOn(signInBtn);
+        YoYo.with(Techniques.Landing).duration(2000).repeat(0).playOn(createAcTextView);
+        YoYo.with(Techniques.Landing).duration(2000).repeat(0).playOn(forgotPassword);
+        YoYo.with(Techniques.Landing).duration(2000).repeat(0).playOn(logo);
+        YoYo.with(Techniques.Landing).duration(2000).repeat(0).playOn(email);
+        YoYo.with(Techniques.Landing).duration(2000).repeat(0).playOn(password);
+
 
         createAcTextView.setOnClickListener(new View.OnClickListener() {
             @Override

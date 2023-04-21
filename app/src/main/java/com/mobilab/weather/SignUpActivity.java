@@ -40,12 +40,12 @@ public class SignUpActivity extends AppCompatActivity {
     FirebaseAuth auth;
     FirebaseFirestore database;
 
-    TextView signInAcTextView;
+    TextView signInAcTextView, name, email, password, password2;
     EditText emailBox, passwordBox, passwordBox2, userName;
     Button signUpBtn;
     ProgressDialog dialog;
 
-    ImageView passwordEye, passwordEye2;
+    ImageView passwordEye, passwordEye2, logo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,17 +63,32 @@ public class SignUpActivity extends AppCompatActivity {
         signInAcTextView = findViewById(R.id.createAcTextView);
         emailBox = findViewById(R.id.emailBox);
         userName = findViewById(R.id.userName);
-        signUpBtn = findViewById(R.id.SignInBtn);
         passwordBox = findViewById(R.id.passwordBox);
         passwordBox2 = findViewById(R.id.passwordBox2);
         userName = findViewById(R.id.userName);
-        signUpBtn = findViewById(R.id.SignInBtn);
+        signUpBtn = findViewById(R.id.SignUpBtn);
         passwordEye = findViewById(R.id.passwordEye);
         passwordEye2 = findViewById(R.id.passwordEye2);
+        name = findViewById(R.id.nameText);
+        password = findViewById(R.id.txt_password);
+        email = findViewById(R.id.txt_email);
+        password2 = findViewById(R.id.reEnterPassword);
+        logo = findViewById(R.id.image_view);
 
 
         YoYo.with(Techniques.FlipInY).duration(1500).repeat(3).playOn(passwordEye);
         YoYo.with(Techniques.FlipInY).duration(1500).repeat(3).playOn(passwordEye2);
+        YoYo.with(Techniques.Landing).duration(2000).repeat(0).playOn(emailBox);
+        YoYo.with(Techniques.Landing).duration(2000).repeat(0).playOn(userName);
+        YoYo.with(Techniques.Landing).duration(2000).repeat(0).playOn(passwordBox);
+        YoYo.with(Techniques.Landing).duration(2000).repeat(0).playOn(passwordBox2);
+        YoYo.with(Techniques.Landing).duration(2000).repeat(0).playOn(signUpBtn);
+        YoYo.with(Techniques.Landing).duration(2000).repeat(0).playOn(name);
+        YoYo.with(Techniques.Landing).duration(2000).repeat(0).playOn(email);
+        YoYo.with(Techniques.Landing).duration(2000).repeat(0).playOn(password);
+        YoYo.with(Techniques.Landing).duration(2000).repeat(0).playOn(password2);
+        YoYo.with(Techniques.Landing).duration(2000).repeat(0).playOn(signInAcTextView);
+        YoYo.with(Techniques.Landing).duration(2000).repeat(0).playOn(logo);
 
         signInAcTextView.setOnClickListener(new View.OnClickListener() {
             @Override

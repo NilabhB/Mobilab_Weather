@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
 
     private RelativeLayout homeRL;
     private ProgressBar loadingPB;
-    private TextView cityNameTV, regionCountryTV, temperatureTV, conditionTV, weatherReportTV, feelsLikeTV, windSpeedTV, humidityTV;
+    private TextView cityNameTV, regionCountryTV, temperatureTV, conditionTV, weatherReportTV, feelsLikeTV, windSpeedTV, humidityTV, weatherForecastTV;
     private TextInputEditText cityEdt;
     private ImageView backIV, iconIV, searchIV, logOutIV;
     private RecyclerView weatherRV;
@@ -79,6 +79,9 @@ public class MainActivity extends AppCompatActivity {
     private LocationManager locationManager;
     private int PERMISSION_CODE = 1;
     private String cityName;
+    private Switch tempSwitch;
+
+    private View separation;
 
     private boolean isFahrenheit = false;
 
@@ -92,6 +95,7 @@ public class MainActivity extends AppCompatActivity {
         setRequestedOrientation(SCREEN_ORIENTATION_PORTRAIT);
         //Objects.requireNonNull(getSupportActionBar()).hide();
 
+        tempSwitch = findViewById(R.id.tempSwitch);
         homeRL = findViewById(R.id.idRLHome);
         loadingPB = findViewById(R.id.idPBLoading);
         cityNameTV = findViewById(R.id.idTVCityName);
@@ -107,11 +111,25 @@ public class MainActivity extends AppCompatActivity {
         iconIV = findViewById(R.id.idIVIcon);
         searchIV = findViewById(R.id.idTVSearch);
         weatherReportTV = findViewById(R.id.idTVweatherReport);
+        weatherForecastTV = findViewById(R.id.idTVweatherForecast);
         logOutIV = findViewById(R.id.logOut);
+        separation = findViewById(R.id.separation);
 
 
-        YoYo.with(Techniques.Flash).duration(1200).repeat(0).playOn(iconIV);
-
+        YoYo.with(Techniques.Pulse).duration(2000).repeat(0).playOn(iconIV);
+        YoYo.with(Techniques.Pulse).duration(2000).repeat(5).playOn(tempSwitch);
+        YoYo.with(Techniques.Pulse).duration(2000).repeat(0).playOn(temperatureTV);
+        YoYo.with(Techniques.Landing).duration(2000).repeat(0).playOn(cityNameTV);
+        YoYo.with(Techniques.Landing).duration(2000).repeat(0).playOn(regionCountryTV);
+        YoYo.with(Techniques.Landing).duration(2000).repeat(0).playOn(conditionTV);
+        YoYo.with(Techniques.Landing).duration(2000).repeat(0).playOn(feelsLikeTV);
+        YoYo.with(Techniques.Landing).duration(2000).repeat(0).playOn(windSpeedTV);
+        YoYo.with(Techniques.Landing).duration(2000).repeat(0).playOn(humidityTV);
+        YoYo.with(Techniques.Landing).duration(2000).repeat(0).playOn(weatherReportTV);
+        YoYo.with(Techniques.FlipInX).duration(2000).repeat(0).playOn(logOutIV);
+        YoYo.with(Techniques.Landing).duration(2000).repeat(0).playOn(weatherForecastTV);
+        YoYo.with(Techniques.Pulse).duration(2000).repeat(5).playOn(separation);
+        YoYo.with(Techniques.RollIn).duration(2000).repeat(0).playOn(searchIV);
 
 
 
@@ -135,7 +153,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        @SuppressLint("UseSwitchCompatOrMaterialCode") Switch tempSwitch = findViewById(R.id.tempSwitch);
         tempSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             isFahrenheit = isChecked;
             getWeatherInfo(cityName);

@@ -168,7 +168,7 @@
         app:layout_constraintTop_toBottomOf="@+id/passwordBox" />
 
     <Button
-        android:id="@+id/SignInBtn"
+        android:id="@+id/SignUpBtn"
         android:layout_width="150dp"
         android:layout_height="50dp"
         android:background="@drawable/button"
@@ -208,7 +208,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/SignInBtn"
+        app:layout_constraintTop_toBottomOf="@+id/SignUpBtn"
         app:layout_constraintVertical_bias="0.343" />
 
     <ImageView

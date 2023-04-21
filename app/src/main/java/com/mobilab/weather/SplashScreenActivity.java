@@ -27,7 +27,7 @@ public class SplashScreenActivity extends AppCompatActivity {
 
         mobilab = findViewById(R.id.mobilabLogo);
 
-        YoYo.with(Techniques.Shake).duration(700).playOn(mobilab);
+        YoYo.with(Techniques.RollIn).duration(700).playOn(mobilab);
 
         Thread thread = new Thread() {
             public void run() {
