@@ -70,7 +70,8 @@ public class MainActivity extends AppCompatActivity {
 
     private RelativeLayout homeRL;
     private ProgressBar loadingPB;
-    private TextView cityNameTV, regionCountryTV, temperatureTV, conditionTV, weatherReportTV, feelsLikeTV, windSpeedTV, humidityTV, weatherForecastTV;
+    private TextView cityNameTV, regionCountryTV, temperatureTV, conditionTV, weatherReportTV, feelsLikeTV, windSpeedTV,
+            humidityTV, weatherForecastTV, localTimeTV;
     private TextInputEditText cityEdt;
     private ImageView backIV, iconIV, searchIV, logOutIV;
     private RecyclerView weatherRV;
@@ -114,6 +115,7 @@ public class MainActivity extends AppCompatActivity {
         weatherForecastTV = findViewById(R.id.idTVweatherForecast);
         logOutIV = findViewById(R.id.logOut);
         separation = findViewById(R.id.separation);
+        localTimeTV = findViewById(R.id.idTVLocalTime);
 
 
         YoYo.with(Techniques.Pulse).duration(2000).repeat(0).playOn(iconIV);
@@ -128,6 +130,7 @@ public class MainActivity extends AppCompatActivity {
         YoYo.with(Techniques.Landing).duration(2000).repeat(0).playOn(weatherReportTV);
         YoYo.with(Techniques.FlipInX).duration(2000).repeat(0).playOn(logOutIV);
         YoYo.with(Techniques.Landing).duration(2000).repeat(0).playOn(weatherForecastTV);
+        YoYo.with(Techniques.Landing).duration(2000).repeat(0).playOn(localTimeTV);
         YoYo.with(Techniques.Pulse).duration(2000).repeat(5).playOn(separation);
         YoYo.with(Techniques.RollIn).duration(2000).repeat(0).playOn(searchIV);
 
@@ -172,7 +175,8 @@ public class MainActivity extends AppCompatActivity {
                 String feelsLikeTemperature = feelsLikeTV.getText().toString().substring(11);
                 String currentWindSpeed = windSpeedTV.getText().toString().substring(12);
                 String currentHumidity = humidityTV.getText().toString().substring(9);
-                shareWeatherReport(currentTime, currentTemperature, feelsLikeTemperature, currentWindSpeed, currentHumidity);
+                String cityLocalTime = localTimeTV.getText().toString().substring(3);
+                shareWeatherReport(currentTime, currentTemperature, feelsLikeTemperature, currentWindSpeed, currentHumidity, cityLocalTime);
             }
         });
 
@@ -236,7 +240,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void shareWeatherReport(String currentTime, String currentTemperature, String feelsLikeTemperature, String currentWindSpeed, String currentHumidity) {
+    private void shareWeatherReport(String currentTime, String currentTemperature, String feelsLikeTemperature, String currentWindSpeed, String currentHumidity, String cityLocalTime) {
         StringBuilder weatherReport = new StringBuilder();
         String currentDate = getCurrentDateString();
 
@@ -246,17 +250,18 @@ public class MainActivity extends AppCompatActivity {
         weatherReport.append(currentDate);
         weatherReport.append("\n\n");
 
-        weatherReport.append("Instant Time: ").append(currentTime).append("\n");
+        weatherReport.append("Instance Time: ").append(currentTime).append(" IST\n");
+        weatherReport.append("City Local Instance Time: ").append(cityLocalTime).append("\n");
         weatherReport.append("Current Temperature: ").append(currentTemperature).append("\n");
         weatherReport.append("Feels Like: ").append(feelsLikeTemperature).append("\n");
         weatherReport.append("Wind Speed: ").append(currentWindSpeed).append("\n");
         weatherReport.append("Humidity: ").append(currentHumidity).append("\n\n\n");
 
-        weatherReport.append("Hourly Weather Forecast:\n\n");
+        weatherReport.append("Hourly Weather Forecast (City Local Time):\n\n");
 
         for (WeatherRVModel model : weatherRVModelArrayList) {
-            SimpleDateFormat input = new SimpleDateFormat("yyyy-MM-dd hh:mm");
-            SimpleDateFormat output = new SimpleDateFormat("hh:mm aa");
+            SimpleDateFormat input = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
+            SimpleDateFormat output = new SimpleDateFormat("hh:mm a", Locale.getDefault());
             try {
                 Date t = input.parse(model.getTime());
                 weatherReport.append("Time: ").append(output.format(t)).append("\n");
@@ -406,7 +411,7 @@ public class MainActivity extends AppCompatActivity {
                     windSpeedTV.setText("Wind Speed: " + WindSpeedText);
 
                     String humidity = response.getJSONObject("current").getString("humidity");
-                    humidityTV.setText("Humidity: " + humidity);
+                    humidityTV.setText("Humidity: " + humidity + "%");
 
                     String city = response.getJSONObject("location").getString("name");
                     cityNameTV.setText(city);
@@ -416,6 +421,17 @@ public class MainActivity extends AppCompatActivity {
 
                     String country = response.getJSONObject("location").getString("country");
                     regionCountryTV.setText(region + country);
+
+                    String localTime = response.getJSONObject("location").getString("localtime");
+                    SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                    SimpleDateFormat outputFormat = new SimpleDateFormat("hh:mm a");
+                    try {
+                        Date parsedLocalTime = inputFormat.parse(localTime);
+                        String formattedLocalTime = outputFormat.format(parsedLocalTime);
+                        localTimeTV.setText("LT " + formattedLocalTime);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
 
                     String condition = response.getJSONObject("current").getJSONObject("condition").getString("text");
                     conditionTV.setText(condition);

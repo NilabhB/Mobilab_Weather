@@ -35,7 +35,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="35dp"
             android:gravity="center"
-            android:paddingTop="15dp"
+            android:paddingTop="10dp"
             android:text="@string/city_name"
             android:textAlignment="center"
             android:textColor="#FFFF00"
@@ -52,13 +52,25 @@
             android:textSize="15sp"
             tools:ignore="RtlHardcoded" />
 
+        <TextView
+            android:id="@+id/idTVLocalTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/idTVRegionCountry"
+            android:text="LT 00:00"
+            android:textColor="	#FFFFFF"
+            android:gravity="center"
+            android:textSize="12sp"
+            android:layout_marginTop="2dp"
+            tools:ignore="RtlHardcoded" />
+
 
         <LinearLayout
             android:id="@+id/idLLEdt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_below="@id/idTVRegionCountry"
+            android:layout_below="@id/idTVLocalTime"
             android:weightSum="5"
             >
             <com.google.android.material.textfield.TextInputLayout
@@ -232,7 +244,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="35dp"
+            android:layout_marginBottom="20dp"
             android:orientation="horizontal"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
@@ -264,7 +276,6 @@
             android:gravity="center"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            android:drawablePadding="0dp"
             android:text="@string/weather_report"
             android:textColor="	#FFFF00"
             android:textSize="14sp"
