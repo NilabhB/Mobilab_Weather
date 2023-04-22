@@ -7,6 +7,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -19,6 +20,8 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -84,6 +87,11 @@ public class MainActivity extends AppCompatActivity {
 
     private View separation;
 
+    private SwipeRefreshLayout swipeRefreshLayout;
+
+    private Handler handler;
+    private Runnable refreshRunnable;
+
     private boolean isFahrenheit = false;
 
 
@@ -116,6 +124,7 @@ public class MainActivity extends AppCompatActivity {
         logOutIV = findViewById(R.id.logOut);
         separation = findViewById(R.id.separation);
         localTimeTV = findViewById(R.id.idTVLocalTime);
+        swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
 
 
         YoYo.with(Techniques.Pulse).duration(2000).repeat(0).playOn(iconIV);
@@ -133,6 +142,25 @@ public class MainActivity extends AppCompatActivity {
         YoYo.with(Techniques.Landing).duration(2000).repeat(0).playOn(localTimeTV);
         YoYo.with(Techniques.Pulse).duration(2000).repeat(5).playOn(separation);
         YoYo.with(Techniques.RollIn).duration(2000).repeat(0).playOn(searchIV);
+
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getWeatherInfo(cityName);
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
+
+                handler = new Handler(Looper.getMainLooper());
+                refreshRunnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        getWeatherInfo(cityName);
+                        handler.postDelayed(this, 60000*10); // 60000 milliseconds = 1 minute
+                    }
+                };
+                handler.post(refreshRunnable);
 
 
 
@@ -525,4 +553,11 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (handler != null && refreshRunnable != null) {
+            handler.removeCallbacks(refreshRunnable);
+        }
+    }
 }
