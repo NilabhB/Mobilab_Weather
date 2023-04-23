@@ -17,4 +17,15 @@
     <string name="weather_report">Weather Report</string>
     <string name="today_s_weather_forecast">Today\'s Weather Forecast</string>
     <string name="city_name">City Name</string>
+    <string name="region_country">Region, Country</string>
+    <string name="lt_00_00">LT 00:00</string>
+    <string name="enter_city_name">Enter City Name</string>
+    <string name="_23">23</string>
+    <string name="feels_like">Feels Like:</string>
+    <string name="wind_speed">Wind Speed:</string>
+    <string name="humidity">Humidity:</string>
+    <string name="condition">Condition</string>
+    <string name="c">°C</string>
+    <string name="f">°F</string>
+    <string name="toggle_temp_unit">Toggle Temp. Unit</string>
 </resources>

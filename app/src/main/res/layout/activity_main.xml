@@ -23,7 +23,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/idRLHome"
-        android:visibility="visible"
+        android:visibility="gone"
         >
         <ImageView
             android:id="@+id/idIVBack"
@@ -51,7 +51,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/idTVCityName"
-            android:text="Region, Country"
+            android:text="@string/region_country"
             android:textColor="	#FFFF00"
             android:gravity="center"
             android:textSize="15sp"
@@ -62,7 +62,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/idTVRegionCountry"
-            android:text="LT 00:00"
+            android:text="@string/lt_00_00"
             android:textColor="	#FFFFFF"
             android:gravity="center"
             android:textSize="12sp"
@@ -85,7 +85,7 @@
                 android:layout_margin="10dp"
                 android:layout_weight="4.5"
                 android:background="@android:color/transparent"
-                android:hint="Enter City Name"
+                android:hint="@string/enter_city_name"
                 android:padding="5dp"
                 app:hintTextColor="@color/white"
                 android:textColorHint="@color/white"
@@ -129,7 +129,7 @@
             android:layout_marginBottom="10dp"
             android:gravity="center_horizontal"
             android:padding="5dp"
-            android:text="23"
+            android:text="@string/_23"
             android:textColor="@color/white"
             android:textSize="45sp" />
 
@@ -148,9 +148,10 @@
                 android:layout_weight="1"
                 android:gravity="end"
                 android:paddingEnd="5dp"
-                android:text="Feels Like: "
+                android:text="@string/feels_like"
                 android:textColor="@color/white"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                tools:ignore="RtlSymmetry" />
 
             <View
                 android:id="@+id/separation"
@@ -171,9 +172,10 @@
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:paddingStart="5dp"
-                    android:text="Wind Speed: "
+                    android:text="@string/wind_speed"
                     android:textColor="@color/white"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    tools:ignore="RtlSymmetry" />
 
                 <TextView
                     android:id="@+id/idTVHumidity"
@@ -181,9 +183,10 @@
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:paddingStart="5dp"
-                    android:text="Humidity: "
+                    android:text="@string/humidity"
                     android:textColor="@color/white"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    tools:ignore="RtlSymmetry" />
 
             </LinearLayout>
 
@@ -214,7 +217,7 @@
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="10dp"
             android:gravity="center"
-            android:text="Condition"
+            android:text="@string/condition"
             android:textAlignment="center"
             android:textColor="@color/white"
             android:textSize="17sp"/>
@@ -229,8 +232,8 @@
             android:checked="false"
             android:minWidth="48dp"
             android:minHeight="48dp"
-            android:textOff="°C"
-            android:textOn="°F"
+            android:textOff="@string/c"
+            android:textOn="@string/f"
             tools:ignore="UseSwitchCompatOrMaterialXml" />
 
         <TextView
@@ -240,9 +243,10 @@
             android:layout_below="@+id/tempSwitch"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="1dp"
-            android:text="Toggle Temp. Unit"
+            android:text="@string/toggle_temp_unit"
             android:textColor="@color/white"
-            android:textSize="8sp" />
+            android:textSize="8sp"
+            tools:ignore="SmallSp" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/idRVWeather"
@@ -269,23 +273,21 @@
 
         <TextView
             android:id="@+id/idTVweatherReport"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/switchLabel"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginStart="120dp"
+            android:layout_centerHorizontal="true"
             android:layout_marginTop="20dp"
-            android:layout_marginEnd="128dp"
-            android:layout_marginBottom="112dp"
             android:gravity="center"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
+            android:drawablePadding="8dp"
             android:text="@string/weather_report"
-            android:textColor="	#FFFF00"
+            android:textColor="#FFFF00"
             android:textSize="14sp"
             android:textStyle="bold"
             app:drawableLeftCompat="@drawable/baseline_share_24" />
+
 
         <ImageView
             android:id="@+id/logOut"
@@ -297,7 +299,6 @@
             android:layout_marginTop="1dp"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="10dp"
-
             app:srcCompat="@drawable/baseline_logout_24" />
 
 
