@@ -4,7 +4,8 @@
         android:propertyName="rotationY"
         android:valueFrom="0"
         android:valueTo="360"
-        android:duration="2000" />
+        android:duration="2000"
+        android:repeatCount="2"/>
 
     <objectAnimator
         android:propertyName="alpha"
