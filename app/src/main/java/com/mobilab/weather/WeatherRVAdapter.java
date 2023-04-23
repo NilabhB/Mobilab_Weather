@@ -1,5 +1,7 @@
 package com.mobilab.weather;
 
+import android.animation.AnimatorInflater;
+import android.animation.AnimatorSet;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -73,7 +75,10 @@ public class WeatherRVAdapter extends RecyclerView.Adapter<WeatherRVAdapter.View
             e.printStackTrace();
         }
 
-        YoYo.with(Techniques.FlipInY).duration(2000).repeat(0).playOn(holder.itemView);
+        AnimatorSet flipAnimation = (AnimatorSet) AnimatorInflater.loadAnimator(context, R.animator.flip_animator);
+        flipAnimation.setTarget(holder.itemView);
+        flipAnimation.start();
+        // YoYo.with(Techniques.FlipInY).duration(2000).repeat(0).playOn(holder.itemView);
     }
 
 
