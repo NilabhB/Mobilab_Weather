@@ -246,7 +246,7 @@ public class MainActivity extends AppCompatActivity {
                 getWeatherInfo(cityName);
             } else {
                 // Couldn't get location, show message or provide a default location
-                Toast.makeText(this, "Could not get your location, please provide a location or try again later", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Sorry! Could not get your location.", Toast.LENGTH_LONG).show();
                 getWeatherInfo("New Delhi");
             }
         }
@@ -372,12 +372,14 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
         if(requestCode == PERMISSION_CODE) {
             if(grantResults.length>0 && grantResults[0]==PackageManager.PERMISSION_GRANTED) {
                 Toast.makeText(this, "Permission Granted!", Toast.LENGTH_SHORT).show();
+                getWeatherInfo(cityName);
             } else {
                 Toast.makeText(this, "Please provide the permission", Toast.LENGTH_SHORT).show();
-                finish();
+                getWeatherInfo("New Delhi");
             }
         }
     }
